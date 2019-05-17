@@ -1,0 +1,18 @@
+{{each(i, l1) menus}}
+	 <li>
+		<a href="#" class="menu-dropdown">
+		    <i class="menu-icon fa fa-bookmark"></i>
+		    <span class="menu-text">${l1.title }</span>
+		</a>
+		<ul class="submenu">
+			{{each(j, level2) l1.level2s}}
+				<li>
+					<a class="tab" href="jv/entity/curd/list/${level2.id }" 
+						target="entity_list_${level2.id }" title="${level2.title }">
+						<span class="menu-text">${level2.title }</span>
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</li>
+{{/each}}
