@@ -478,7 +478,7 @@ define(function(require, exports, module){
 							if(res.uuid){
 								$msg.text('导出完成');
 								$btnDownload.removeAttr('disabled').off('click').click(function(){
-									Ajax.download('api2/entity/export/download/' + res.uuid + '?@token=' + localStorage.getItem('datacenter-jv-token'));
+									Ajax.download('api2/entity/export/download/' + res.uuid + '?@token=' + Ajax.getAuthToken());
 								}).show();
 								$btnBreak.off('click').click(function(){
 									resetExport();

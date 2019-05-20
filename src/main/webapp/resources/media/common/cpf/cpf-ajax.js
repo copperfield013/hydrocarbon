@@ -184,7 +184,7 @@ define(function(require, exports, module){
 		
 		var headers = {};
 		($CPF.getParam('handlersHeader') || $.noop)(headers);
-		var token = localStorage.getItem(AJAX_LOCAL_STORAGE_TOKEN_KEY);
+		var token = exports.getAuthToken();
 		if(token){
 			//var isTimeout = new Date().getTime() - tokeObj.time >  $CPF.getParam('ajaxHeaderTokenTimeout');
 			headers[AJAX_HEADER_TOKEN_KEY] = token;
@@ -388,7 +388,10 @@ define(function(require, exports, module){
 	exports.AjaxPageResponse = AjaxPageResponse;
 	exports.download = download;
 	exports.loadResource = loadResource;
-	
+	exports.AJAX_LOCAL_STORAGE_TOKEN_KEY = AJAX_LOCAL_STORAGE_TOKEN_KEY;
+	exports.getAuthToken = function(){
+		return localStorage.getItem(AJAX_LOCAL_STORAGE_TOKEN_KEY);
+	}
 	/**
 	 * 轮询查询当前进度
 	 * @return 返回一个操作对象

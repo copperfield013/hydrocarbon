@@ -220,7 +220,7 @@
 </div>
 <script>
 	console.log(1);
-	seajs.use([ 'tmpl/js/dtmpl-update.js' ], function(ViewTmpl) {
+	seajs.use([ 'tmpl/js/dtmpl-update.js?1' ], function(ViewTmpl) {
 		var $page = $('#dtmpl-update-${module.name}-${tmpl.id }-${RES_STAMP}');
 		console.log($page);
 		var updateMode = '${tmplJson != null}' == 'true';

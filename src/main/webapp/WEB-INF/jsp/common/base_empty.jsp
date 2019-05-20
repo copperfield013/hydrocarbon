@@ -5,7 +5,7 @@
 <%@ taglib prefix="Entity" uri="/tld/EntityTag" %>
 
 
-<c:set var="cpfVersion" value="1.2" />
+<c:set var="cpfVersion" value="1.3" />
 
 <fmt:setBundle basename="jspPage" var="logo"/>
 

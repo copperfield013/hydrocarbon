@@ -1,6 +1,6 @@
 
 <script id="tmpl-field-rows">
-	<tr>
+	<tr composite-id="${field.compositeId? field.compositeId : ''}">
 		<td>
 			<span class="field-title">${field.title}</span>
 		</td>
@@ -13,6 +13,7 @@
 			{{/if}}
 		</td>
 	</tr>
+	
 </script>
 
 <script id="tmpl-list">

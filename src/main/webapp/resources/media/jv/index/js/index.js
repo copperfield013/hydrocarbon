@@ -43,7 +43,7 @@ define(function(require, exports, module){
 		
 		$('#logout').click(function(){
 			require('dialog').confirm('确认退出登录？').done(function(){
-				localStorage.removeItem('datacenter-jv-token');
+				localStorage.removeItem(Ajax.AJAX_LOCAL_STORAGE_TOKEN_KEY);
 				location.href = 'jv/main/login';
 			});
 		});

@@ -32,6 +32,7 @@ define(function(require){
 	require('css');
 	require('control');
 	require('checkbox');
+	require('field/js/field-search.js')
 	$CPF.putPageInitSequeue(12, function($page){
 		$(':text.dtrangepicker', $page).each(function(){
 			require('utils').daterangepicker($(this));

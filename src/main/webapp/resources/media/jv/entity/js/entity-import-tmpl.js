@@ -18,9 +18,14 @@ define(function(require, exports, module){
 		
 		var context = Utils.createContext({
 			fieldDictionary			: [],
-			tmplFields				: []
+			tmplFields				: [],
+			originTmpl				: null,
+			fieldPicker				: null,
+			hasChanged				: false,
+			tmpls					: [],
+			tmplId					: null
 		});
-		require('event').bindScopeEvent($page, {saveTmpl, toggleTemplates});
+		require('event').bindScopeEvent($page, {saveTmpl, toggleTemplates, downloadTmpl});
 		var $tbody = $('.fields-l tbody', $page);
 		bindRowSortable();
 		
@@ -43,8 +48,23 @@ define(function(require, exports, module){
 				var originTmpl = context.getStatus('originTmpl');
 				if(fieldPicker && originTmpl){
 					fieldPicker.reset();
-					$.each(sortTmplFields(originTmpl.fields), function(){
-						fieldPicker.select(this.fieldId, {dataId: this.id});
+					var sortedFields = sortTmplFields(originTmpl.fields);
+					$.each(sortedFields, function(){
+						if(this.fieldId){
+							fieldPicker.select(this.fieldId, {dataId: this.id});
+						}
+					});
+					//调整$label$表头位置
+					$.each(sortedFields, function(i){
+						if(this.compositeId){
+							var $labelRow = $tbody.children('tr[composite-id="' + this.compositeId + '"]');
+							var position = $labelRow.index();
+							if(i < position){
+								$labelRow.insertBefore($tbody.children('tr').eq(i));
+							} else if(i > position){
+								$labelRow.insertAfter($tbody.children('tr').eq(i));
+							}
+						}
 					});
 				}
 			}
@@ -69,6 +89,7 @@ define(function(require, exports, module){
 				if(field.composite.type === 'normal'){
 					toggleDisabled(true);
 					tmplFields.push({
+						id			: data && data.dataId,
 						title		: field.name,
 						fieldId		: field.id,
 						order		: tmplFields.length,
@@ -89,20 +110,25 @@ define(function(require, exports, module){
 					});
 					if(fieldIsRelation && maxRelationLabelIndex === maxFieldIndex){
 						tmplFields.push({
-							title		: field.composite.name + '[' + (maxRelationLabelIndex + 1) + '].$label$',
-							compositeId	: field.composite.id,
-							fieldIndex	: maxRelationLabelIndex + 1,
-							order		: tmplFields.length
+							title			: field.composite.name + '[' + (maxRelationLabelIndex + 1) + '].$label$',
+							compositeId		: field.composite.id,
+							fieldIndex		: maxRelationLabelIndex + 1,
+							order			: tmplFields.length,
+							labelComposite	: field.composite
 						})
 					}
 					tmplFields.push({
+						id			: data && data.dataId,
 						title		: field.composite.name + '[' + (maxFieldIndex + 1) + '].' + field.name,
 						fieldId		: field.id,
 						fieldIndex	: maxFieldIndex + 1,
-						order		: tmplFields.length
+						order		: tmplFields.length,
+						composite	: field.composite,
+						field		: field
 					});
 				}
 				context.setStatus('tmplFields');
+				if(!data){context.setStatus('hasChanged', true)}
 			}
 			
 			function whenFieldReseted(){
@@ -132,6 +158,47 @@ define(function(require, exports, module){
 			function removeRow(field){
 				var tmplFields = context.getStatus('tmplFields');
 				tmplFields.splice(tmplFields.indexOf(field), 1);
+				if(field.composite){
+					var hasRemainSublings = null;
+					if(field.composite.type === 'relation'){
+						//检测关系字段是否全被移除，如果关系字段全被移除，那么自动移除label字段
+						hasRemainSublings = false;
+						var relationLabelIndex = -1;
+						$.each(tmplFields, function(i){
+							if(this.composite && this.composite.id === field.composite.id && this.fieldIndex == field.fieldIndex){
+								hasRemainSublings = true;
+							}else if(this.compositeId === field.composite.id && this.fieldIndex === field.fieldIndex){
+								relationLabelIndex = i;
+							}
+						});
+						if(!hasRemainSublings){
+							tmplFields.splice(relationLabelIndex, 1);
+						}
+					}
+					//检测某个索引的数组字段是否全被移除，如果被移除，那么后面索引的字段索引自动减1
+					if(hasRemainSublings == null){
+						hasRemainSublings = false;
+						$.each(tmplFields, function(){
+							if(this.composite && this.composite.id === field.composite.id && this.fieldIndex == field.fieldIndex){
+								hasRemainSublings = true;
+								return false;
+							}
+						});
+					}
+					if(!hasRemainSublings){
+						$.each(tmplFields, function(){
+							if(this.labelComposite && this.compositeId === field.composite.id && this.fieldIndex > field.fieldIndex){
+								this.fieldIndex--;
+								this.title = this.labelComposite.name + '[' + this.fieldIndex + '].$label$';
+							}else if(this.composite && this.composite.id === field.composite.id && this.fieldIndex > field.fieldIndex){
+								this.fieldIndex--;
+								this.title = this.composite.name + '[' + this.fieldIndex + '].' + this.field.name;
+							}
+						});
+					}
+					
+				}
+				
 				$.each(tmplFields, function(){
 					if(this.order > field.order){
 						this.order--;
@@ -139,6 +206,7 @@ define(function(require, exports, module){
 				});
 				if(field.enableSelect){field.enableSelect()}
 				context.setStatus('tmplFields')
+				context.setStatus('hasChanged', true);
 			}
 			
 			/**
@@ -174,6 +242,7 @@ define(function(require, exports, module){
 				Ajax.ajax('api2/entity/import/tmpl/' + param.menuId + '/' + tmplId).done(function(res){
 					noticeAssert(res.tmpl, '获得导入模板失败');
 					context.setStatus('originTmpl', res.tmpl);
+					context.setStatus('hasChanged', false);
 					$CPF.closeLoading();
 				});
 			}
@@ -203,6 +272,7 @@ define(function(require, exports, module){
 					$.each(context.getStatus('tmplFields'), function(){
 						this.order = this.$row.index();
 					});
+					context.setStatus('hasChanged', true)
 					console.log(context.getStatus('tmplFields'));
 				}
 			});
@@ -221,6 +291,7 @@ define(function(require, exports, module){
 		
 		
 		function saveTmpl(){
+			var defer = $.Deferred();
 			var tmplFields = context.getStatus('tmplFields');
 			var tmplTitle = $('#tmpl-title', $page).val();
 			try{
@@ -232,7 +303,7 @@ define(function(require, exports, module){
 						fields	: [], 
 				};
 				$.each(sortTmplFields(tmplFields), function(){
-					saveData.fields.push(Utils.setProperties(this, ['id', 'fieldId', 'compositeId']));
+					saveData.fields.push(Utils.setProperties(this, ['id', 'fieldId', 'compositeId', 'fieldIndex']));
 				});
 				console.log(saveData);
 				Dialog.confirm('确认保存导入模板？').done(function(){
@@ -240,12 +311,26 @@ define(function(require, exports, module){
 						if(res.tmplId){
 							Dialog.notice('保存成功', 'success');
 							console.log(res.tmplId);
+							defer.resolve(res);
 						}else{
 							Dialog.notice('保存失败', 'error');
 						}
 					});
 				});
 			}catch(e){}
+			return defer.promise();
+		}
+		
+		function downloadTmpl(){
+			var originTmpl = context.getStatus('originTmpl');
+			var hasChanged = context.getStatus('hasChanged');
+			if(!originTmpl || originTmpl && hasChanged){
+				saveTmpl().done(function(res){
+					Ajax.download('api2/entity/import/download_tmpl/' + res.tmplId + '?@token=' + Ajax.getAuthToken());
+				});
+			}else if(originTmpl && !hasChanged){
+				Ajax.download('api2/entity/import/download_tmpl/' + originTmpl.id + '?@token=' + Ajax.getAuthToken());
+			}
 		}
 		
 		function setCurrentTemplate(){

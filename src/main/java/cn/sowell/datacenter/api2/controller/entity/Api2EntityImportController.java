@@ -34,15 +34,12 @@ import cn.sowell.copframe.dto.ajax.JsonRequest;
 import cn.sowell.copframe.dto.ajax.PollStatusResponse;
 import cn.sowell.copframe.dto.ajax.ResponseJSON;
 import cn.sowell.copframe.spring.file.FileUtils;
-import cn.sowell.copframe.utils.TextUtils;
 import cn.sowell.copframe.web.poll.ProgressPollableThread;
 import cn.sowell.copframe.web.poll.ProgressPollableThreadFactory;
 import cn.sowell.copframe.web.poll.WorkProgress;
 import cn.sowell.datacenter.admin.controller.modules.AdminModulesImportController;
 import cn.sowell.datacenter.common.ApiUser;
-import cn.sowell.datacenter.common.UserWithToken;
 import cn.sowell.datacenter.model.admin.service.AdminUserService;
-import cn.sowell.datacenter.model.admin.service.impl.AdminUserServiceImpl.Token;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
 import cn.sowell.datacenter.model.modules.bean.EntityImportDictionary;
@@ -236,28 +233,24 @@ public class Api2EntityImportController {
 		ModuleImportTemplate tmpl = AdminModulesImportController.toImportTemplate(menu.getTemplateModule(), reqJson, user);
 		if(tmpl != null) {
 			Long tmplId = impService.saveTemplate(tmpl);
-			String uuid = TextUtils.uuid();
-			user.setCache(AdminModulesImportController.SESSION_KEY_FIELD_NAMES + uuid, tmplId);
-			jRes.put("uuid", uuid);
 			jRes.put("tmplId", tmplId);
+			jRes.setStatus("suc");
+		}else {
+			jRes.setStatus("ungenerate import template");
 		}
 		return jRes;
 	}
 	
-	@RequestMapping("/download_tmpl/{tokenCode}/{uuid}")
+	@RequestMapping("/download_tmpl/{tmplId}")
 	public ResponseEntity<byte[]> download(
-			@PathVariable String uuid, @PathVariable String tokenCode){
-		Token token = uService.validateToken(tokenCode);
-		token.refreshDeadline();
-		UserWithToken user = token.getUser();
-		Long tmplId = (Long) user.getCache(AdminModulesImportController.SESSION_KEY_FIELD_NAMES + uuid);
+			@PathVariable Long tmplId, ApiUser user){
 		ModuleImportTemplate tmpl = impService.getImportTempalte(tmplId);
 		if(tmpl != null) {
 			try {
 				byte[] tmplInputStream = impService.createImportTempalteBytes(tmpl);
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentDispositionFormData("attachment", new String(
-						(tmpl.getTitle() + ".xlsx").getBytes("UTF-8"),
+						("导入模板(" + tmpl.getTitle() + ")" + ".xlsx").getBytes("UTF-8"),
 						"iso-8859-1"));
 				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 				return new ResponseEntity<byte[]>(tmplInputStream, headers, HttpStatus.CREATED);

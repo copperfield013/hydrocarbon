@@ -12,7 +12,7 @@
 			<a class="export btn-toggle" title="保存导入模板" id="btn-save" href="javascript:;" on-click="saveTmpl">
 				<i class="fa fa-save"></i>
 			</a>
-			<a class="btn-toggle" title="下载导入模板" id="btn-download" href="javascript:;">
+			<a class="btn-toggle" title="下载导入模板" id="btn-download" href="javascript:;" on-click="downloadTmpl">
 				<i class="fa fa-download"></i>
 			</a>
 			<a class="btn-toggle" title="新建模板" id="btn-new" href="javascript:;">

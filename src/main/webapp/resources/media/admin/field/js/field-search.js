@@ -1,7 +1,7 @@
 /**
  * 字段选择器
  */
-define(function(require, exports, module){
+define(function(require1, exports, module){
 	var cachableFieldJson = {}; 
 	
 	function getCachableFieldJson(reqURL, reqParam){
@@ -10,7 +10,7 @@ define(function(require, exports, module){
 		if(cachableFieldJson[key]){
 			defer.resolve(cachableFieldJson[key]);
 		}else{
-			require('ajax').ajax(reqURL, reqParam, function(data){
+			require1('ajax').ajax(reqURL, reqParam, function(data){
 				cachableFieldJson[key] = data;
 				defer.resolve(data);
 			});
@@ -186,7 +186,7 @@ define(function(require, exports, module){
 							hasFieldMode: function(modeName){
 								return $.inArray(modeName, param.fieldModes) >= 0;
 							},
-							pickerKey	: require('utils').uuid(5, 62)
+							pickerKey	: require1('utils').uuid(5, 62)
 						});
 						$('.fieldpicker-field-item', __$fieldPicker).click(function(){
 							var $this = $(this);
@@ -268,13 +268,13 @@ define(function(require, exports, module){
 						bindedSearchTexts.forEach(function(t){
 							$(t).prop('disabled', false);
 						})
-						require('utils').removeStyle($nav, 'display');
+						require1('utils').removeStyle($nav, 'display');
 						$('>.tab-content>.tab-pane', $fieldPicker).each(function(){
 							var $pane = $(this);
 							if($pane.is('.composites-tab')){
 								$pane.hide();
 							}else{
-								require('utils').removeStyle($pane, 'display');
+								require1('utils').removeStyle($pane, 'display');
 							}
 						});
 						break;
@@ -345,7 +345,7 @@ define(function(require, exports, module){
 						if(param.disablePicked){
 							_this.isFieldDisabled(fieldId).done(function(disabled){
 								if(disabled){
-									require('dialog').notice('不能选择该字段', 'error');
+									require1('dialog').notice('不能选择该字段', 'error');
 								}else{
 									_this.enableField(suggestion.id, false).done(function(field){
 										thisParam.afterSelected.apply(_this, [field, $this]);
@@ -682,7 +682,7 @@ define(function(require, exports, module){
 	function loadGlobalTmpl(){
 		if(globalFieldSearchTemplateDeferred == null){
 			globalFieldSearchTemplateDeferred = $.Deferred();
-			require('tmpl').load('media/admin/field/tmpl/tmpl-fieldsearch.tmpl').done(function(tmpl){
+			require1('tmpl').load('media/admin/field/tmpl/tmpl-fieldsearch.tmpl').done(function(tmpl){
 				globalFieldSearchTemplateDeferred.resolve(tmpl);
 			});
 		}

@@ -1,10 +1,9 @@
-define(function(require, exports, module){
-	"use strict";
+define(function(require1, exports, module){
 	 function adjustFieldTitle($titleLabel){
 		var $titleSpan = $('<span class="field-title-d">').text($titleLabel.text());
 		$titleLabel.empty().append($titleSpan);
-		require('utils').removeStyle($titleLabel, 'font-size');
-		require('utils').removeStyle($titleLabel, 'line-height');
+		require1('utils').removeStyle($titleLabel, 'font-size');
+		require1('utils').removeStyle($titleLabel, 'line-height');
 		var thisWidth = $titleSpan.width(),
 		thisHeight = $titleSpan.height(),
 		parentWidth = $titleLabel.width(),
@@ -23,8 +22,8 @@ define(function(require, exports, module){
 	exports.adjustFieldTitle = adjustFieldTitle;
 	
 	exports.init = function($page, _param){
-		var FieldSearch = require('field/js/field-search.js');
-		var FieldInput = require('field/js/field-input.js');
+		var FieldSearch = require1('field/js/field-search.js');
+		var FieldInput = require1('field/js/field-input.js');
 		
 		FieldInput.loadGlobalOptions('admin/field/enum_json').done(function(){
 			//初始化参数
@@ -137,7 +136,7 @@ define(function(require, exports, module){
 						optGroupKey		: groupFieldData.optionGroupKey,
 						validators		: []
 				};
-				var VALIDATORS = ['required'];
+				var VALIDATORS = ['require1d'];
 				if(!$.isArray(groupFieldData.validators)){
 					groupFieldData.validators = [];
 				}
@@ -172,7 +171,7 @@ define(function(require, exports, module){
 								opacity		: 0.5,
 								tolerance 	: 'pointer',
 								stop		: function(e, ui){
-									var Utils = require('utils');
+									var Utils = require1('utils');
 									$(this).children().each(function(index){
 										var $title = $(this);
 										var fieldId = $title.attr('field-id');
@@ -199,7 +198,7 @@ define(function(require, exports, module){
 							$filterItemControl.show().find('.btn-filter').click(function(){
 								var filterId = $group.attr('array-item-filter-id');
 								var reqParam = {filterId};
-								require('dialog').openDialog(
+								require1('dialog').openDialog(
 										'admin/tmpl/dtmpl/arrayitem_filter/' + param.module + '/'  + field.c_id,
 										'编辑过滤器', undefined, {
 											reqParam 	: reqParam,
@@ -234,7 +233,7 @@ define(function(require, exports, module){
 											reqParam.moduleName = param.module;
 											reqParam.compositeId = field.c_id;
 										}
-										require('dialog').openDialog(
+										require1('dialog').openDialog(
 												'admin/tmpl/stmpl/' + (stmplId? ('update/' + stmplId) : 'create')
 												, '编辑选择模板' + field.c_title, undefined, {
 													reqParam	: reqParam,
@@ -261,7 +260,7 @@ define(function(require, exports, module){
 										}
 											
 										
-										require('dialog').openDialog('admin/tmpl/group/rabc_relate/' + param.module + '/' + field.c_id
+										require1('dialog').openDialog('admin/tmpl/group/rabc_relate/' + param.module + '/' + field.c_id
 												, '选择关联模板组合', undefined, {
 											reqParam	: reqParam,
 											onSubmit	: function(data){
@@ -277,7 +276,7 @@ define(function(require, exports, module){
 										if(rdtmplId){
 											reqParam.dtmplId = rdtmplId;
 										}
-										require('dialog').openDialog('admin/tmpl/dtmpl/relation_dtmpl/' + param.module + '/' + field.c_id
+										require1('dialog').openDialog('admin/tmpl/dtmpl/relation_dtmpl/' + param.module + '/' + field.c_id
 												, '编辑关系详情模板（' + field.c_title + '）', undefined, {
 											reqParam	: reqParam,
 											width		: 1000,
@@ -333,12 +332,12 @@ define(function(require, exports, module){
 					//绑定点击配置按钮打开弹出框的事件
 					$('.field-group-config', $fieldGroup).click(function(){
 						var groupTitle = $('.group-title', $fieldGroup).text();
-						require('tmpl').load('media/admin/tmpl/tmpl/dtmpl-fieldgroup-config-dialog.tmpl').done(function(tmpl){
+						require1('tmpl').load('media/admin/tmpl/tmpl/dtmpl-fieldgroup-config-dialog.tmpl').done(function(tmpl){
 							//创建一个副本对象，用于参数弹出框中的基准
 							var thisFieldGroupConfigData = Object.assign({}, fieldGroupData);
 							//根据参数对象，打开弹出框
 							var $dialog = tmpl.tmpl(thisFieldGroupConfigData);
-							var fieldGroupConfigPage = require('dialog').openDialog($dialog, '字段组参数（' + groupTitle + '）', undefined, {
+							var fieldGroupConfigPage = require1('dialog').openDialog($dialog, '字段组参数（' + groupTitle + '）', undefined, {
 								width		: 450,
 								height		: 420,
 								contentType	: 'dom',
@@ -385,16 +384,16 @@ define(function(require, exports, module){
 				 * 从后台加载属性模板的node选项
 				 */
 				function loadNodesOptionFromServer(){
-					require('$CPF').showLoading();
+					require1('$CPF').showLoading();
 					thisFieldGroupConfigData.rabcTreeNodeOptions = [];
-					require('ajax').ajax('api2/meta/tmpl/ttmpl/' 
+					require1('ajax').ajax('api2/meta/tmpl/ttmpl/' 
 							+ thisFieldGroupConfigData.rabcTreeTemplateId).done(function(data){
 						if(data.ttmpl && data.ttmpl){
 							thisFieldGroupConfigData.rabcTreeNodeOptions = convertFromTreeNodes(data.ttmpl.nodes);
 							initTreeNodesSelect2();
 						}
 					}).always(function(){
-						require('$CPF').closeLoading();
+						require1('$CPF').closeLoading();
 					});
 				}
 				function convertFromTreeNodes(ttmplNodes){
@@ -433,7 +432,7 @@ define(function(require, exports, module){
 				
 				//绑定取消关联模板组合的事件
 				$('.unselect-ttmpl', $dialog).click(function(){
-					require('dialog').confirm('确认取消关联树形模板？').done(function(){
+					require1('dialog').confirm('确认取消关联树形模板？').done(function(){
 						thisFieldGroupConfigData.rabcTreeTemplateId = null;
 						thisFieldGroupConfigData.rabcTreeTemplateTitle = null;
 						$chooseTreeTemplateButton.text('选择树形模板');
@@ -450,7 +449,7 @@ define(function(require, exports, module){
 				var fieldGroupData = $fieldGroup.data('fieldgroup-config-data');
 				if(!fieldGroupData){
 					fieldGroupData = {
-							uuid					: require('utils').uuid(5,62),
+							uuid					: require1('utils').uuid(5,62),
 							isRelation				: composite.addType == 5,
 							isRabc					: !!composite.relModuleName,
 							rabcModule				: composite.relModuleName,
@@ -499,7 +498,7 @@ define(function(require, exports, module){
 				
 				//绑定取消关联模板组合的事件
 				$('.unselect-tmplgroup', $dialog).click(function(){
-					require('dialog').confirm('确认取消关联模板组合？').done(function(){
+					require1('dialog').confirm('确认取消关联模板组合？').done(function(){
 						thisFieldGroupConfigData.rabcTemplateGroupId = null;
 						thisFieldGroupConfigData.rabcTemplateGroupTitle = null;
 						$chooseTemplateGroupButton.text('选择模板组合');
@@ -538,7 +537,7 @@ define(function(require, exports, module){
 				var $stmplCheckbox = $('.stmpl-checkbox', $dialog),
 					$ttmplCheckbox = $('.ttmpl-checkbox', $dialog),
 					$ltmplCheckbox = $('.ltmpl-checkbox', $dialog);
-				require('utils').mutexCheckbox($('.dialog-select-type :checkbox', $dialog));
+				require1('utils').mutexCheckbox($('.dialog-select-type :checkbox', $dialog));
 				
 				bindCheckboxLinkGroup({
 					$link		: $('.stmpl-link', $dialog),
@@ -551,7 +550,7 @@ define(function(require, exports, module){
 							reqParam.moduleName = param.module;
 							reqParam.compositeId = composite.c_id;
 						}
-						require('dialog').openDialog(
+						require1('dialog').openDialog(
 								'admin/tmpl/stmpl/' + (stmplId? ('update/' + stmplId) : 'create')
 								, '编辑选择模板', undefined, {
 								reqParam	: reqParam,
@@ -586,7 +585,7 @@ define(function(require, exports, module){
 					openDialog	: function(){
 						var defer = $.Deferred();
 						var reqParam = {filterId: thisFieldGroupConfigData.arrayItemFilterId || ''};
-						require('dialog').openDialog(
+						require1('dialog').openDialog(
 							'admin/tmpl/dtmpl/arrayitem_filter/' + param.module + '/'  + composite.c_id,
 							'编辑过滤器', undefined, {
 								reqParam 	: reqParam,
@@ -652,7 +651,7 @@ define(function(require, exports, module){
 				if(configData.rabcTreeTemplateId){
 					if(!configData.rabcTreeNodeIds || configData.rabcTreeNodeIds.length == 0){
 						var msg = '当关联了树形模板，必须至少选择一个可选节点';
-						require('dialog').notice(msg, 'error');
+						require1('dialog').notice(msg, 'error');
 						$.error(msg);
 					}
 				}
@@ -670,7 +669,7 @@ define(function(require, exports, module){
 			 */
 			function bindDblClickEdit(selector, inputClass){
 				$page.on('dblclick', selector, function(e){
-					require('utils').toEditContent(e.target, inputClass).bind('confirmed', function(text, $this){
+					require1('utils').toEditContent(e.target, inputClass).bind('confirmed', function(text, $this){
 						if($this.is('.field-title')){
 							adjustFieldTitle($this);
 						}else if($this.is('.group-title')){
@@ -689,7 +688,7 @@ define(function(require, exports, module){
 			 */
 			function toggleFieldExpand($field, toExpand){
 				var $i = $('.toggle-expand-field i', $field);
-				require('utils').switchClass($i, 'fa-expand', 'fa-compress', toExpand, function(compressed){
+				require1('utils').switchClass($i, 'fa-expand', 'fa-compress', toExpand, function(compressed){
 					$field.toggleClass('dbcol', !compressed);
 				});
 			}
@@ -712,7 +711,7 @@ define(function(require, exports, module){
 			 * 检查并整合页面中的模板数据
 			 */
 			function checkSaveData(callback){
-				var Dialog = require('dialog');
+				var Dialog = require1('dialog');
 				var saveData = {
 						tmplId	: param.tmplId,
 						//模板名
@@ -844,7 +843,7 @@ define(function(require, exports, module){
 				//初始化字段组的字段搜索自动完成功能
 				initGroupFieldSearchAutocomplete($group);
 				//页面滚动到底部
-				require('utils').scrollTo($page.closest('.cpf-page-content'));
+				require1('utils').scrollTo($page.closest('.cpf-page-content'));
 				//触发字段组的标题修改功能
 				$group.find('.group-title').trigger('dblclick');
 				if(indexer){
@@ -855,13 +854,13 @@ define(function(require, exports, module){
 			function doSave(saveData, saveOptions){
 				var defer = $.Deferred();
 				var submitData = $.extend({}, saveData, saveOptions);
-				require('ajax').postJson('admin/tmpl/dtmpl/save', submitData, function(data){
+				require1('ajax').postJson('admin/tmpl/dtmpl/save', submitData, function(data){
 					if(data.status === 'suc'){
-						require('dialog').notice('保存成功', 'success');
+						require1('dialog').notice('保存成功', 'success');
 						$page.getLocatePage().close();
 						defer.resolve(data.dtmplId);
 					}else{
-						require('dialog').notice('保存失败', 'error');
+						require1('dialog').notice('保存失败', 'error');
 					}
 				});
 				return defer.promise();
@@ -869,7 +868,7 @@ define(function(require, exports, module){
 			
 			//绑定点击保存按钮时的回调
 			$('#save', $page).click(function(){
-				var Dialog = require('dialog');
+				var Dialog = require1('dialog');
 				checkSaveData(function(saveData){
 					if(param.mainModule){
 						var page = $page.getLocatePage();
@@ -901,7 +900,7 @@ define(function(require, exports, module){
 						}
 					}else{
 						doSave(saveData).done(function(){
-							var tpage = require('page').getPage(param.module + '_dtmpl_list');
+							var tpage = require1('page').getPage(param.module + '_dtmpl_list');
 							if(tpage){
 								tpage.refresh();
 							}
@@ -915,7 +914,7 @@ define(function(require, exports, module){
 				var $dtmplListContainer = $('#dtmpl-list-container', $page);
 				if(dtmplListLoadProgress === 0){
 					//ajax加载
-					require('ajax').ajax('admin/tmpl/dtmpl/load_dtmpls/' + param.module, {
+					require1('ajax').ajax('admin/tmpl/dtmpl/load_dtmpls/' + param.module, {
 						excludeDtmplId	: param.tmplId
 					}, function(data){
 						if(data.status === 'suc'){
@@ -965,7 +964,7 @@ define(function(require, exports, module){
 				$group = getLocateGroup(e.target),
 				fieldTitle = $field.find('.field-title').text(),
 				groupName = $group.find('.group-title').text();
-				require('dialog').confirm('确认在字段组[' + groupName + ']中删除字段[' + fieldTitle + ']？', function(yes){
+				require1('dialog').confirm('确认在字段组[' + groupName + ']中删除字段[' + fieldTitle + ']？', function(yes){
 					if(yes){
 						if($field.siblings('div[field-id]').length == 0){
 							//如果是最后一个字段，那么就重置该字段组
@@ -989,7 +988,7 @@ define(function(require, exports, module){
 				if(fieldData && fieldData.title){
 					fieldName = fieldData.title;
 				}
-				require('dialog').confirm('确认恢复字段[' + fieldTitle + ']为原始名称[' + fieldName + ']？', function(yes){
+				require1('dialog').confirm('确认恢复字段[' + fieldTitle + ']为原始名称[' + fieldName + ']？', function(yes){
 					if(yes){
 						$fieldTitle.text(fieldName);
 						adjustFieldTitle($fieldTitle);
@@ -1003,7 +1002,7 @@ define(function(require, exports, module){
 				var $field = getLocateField(e.target);
 				var $fieldValue = $field.find('.field-value').eq(0);
 				if(tounsetdefval){
-					require('dialog').confirm('是否取消当前字段的默认值？', function(yes){
+					require1('dialog').confirm('是否取消当前字段的默认值？', function(yes){
 						if(yes){
 							initFieldDefaultValue($field, false);
 							$a.removeClass('tounsetdefval');
@@ -1060,7 +1059,7 @@ define(function(require, exports, module){
 				$group = getLocateGroup(e.target),
 				groupName = $group.find('.group-title').text();
 				if(fieldId){
-					require('dialog').confirm('确认在字段组[' + groupName + ']中删除字段[' + title + ']？', function(yes){
+					require1('dialog').confirm('确认在字段组[' + groupName + ']中删除字段[' + title + ']？', function(yes){
 						if(yes){
 							var isOnly = false;
 							if($title.siblings('th[field-id]').length == 0){
@@ -1089,7 +1088,7 @@ define(function(require, exports, module){
 				if(fieldData && fieldData.title){
 					fieldTitle = fieldData.title;
 				}
-				require('dialog').confirm('确认恢复字段[' + title + ']为原始名称[' + fieldTitle + ']？', function(yes){
+				require1('dialog').confirm('确认恢复字段[' + title + ']为原始名称[' + fieldTitle + ']？', function(yes){
 					if(yes){
 						$title.text(fieldTitle);
 					}
@@ -1101,7 +1100,7 @@ define(function(require, exports, module){
 				var $group = getLocateGroup(e.target);
 				var groupTitle = $group.find('.group-title').text();
 				var compositeId = $group.attr('composite-id');
-				require('dialog').confirm('是否删除字段组[' + groupTitle + ']', function(yes){
+				require1('dialog').confirm('是否删除字段组[' + groupTitle + ']', function(yes){
 					if(yes){
 						//移除
 						$group.remove();
@@ -1158,7 +1157,7 @@ define(function(require, exports, module){
 			}
 			//字段的标题初始化，需要延迟，等到页面加载完之后执行
 			setTimeout(function(){
-				var Indexer = require('indexer')
+				var Indexer = require1('indexer')
 				indexer = new Indexer({
 					scrollTarget: $page.closest('.main-tab-content')[0],
 					elements	: getAllGroups(),
