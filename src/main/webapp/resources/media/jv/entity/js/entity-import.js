@@ -48,7 +48,7 @@ define(function(require, exports, module){
 			var importSubscriber = importHandler.addSubscriber({
 				key					: param.menuId,
 				startupReqMethod	: 'ajax',
-				startupURL			: 'api2/entity/import/start/' + param.menuId + '?fake=1&exportFaildFile=1',
+				startupURL			: 'api2/entity/import/start/' + param.menuId + '?exportFaildFile=1',
 				progressURL			: 'api2/entity/import/status',
 				msgIndexRequestName	: 'msgIndex',
 				maxMsgCount			: context.getStatus('maxShowMsgCount'),
