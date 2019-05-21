@@ -46,7 +46,7 @@ import cn.sowell.dataserver.model.tmpl.param.StatModuleDetail;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroup;
 import cn.sowell.dataserver.model.tmpl.service.TemplateGroupService;
 
-@Controller
+@Controller 
 @RequestMapping(AdminConstants.URI_CONFIG + "/sidemenu")
 @PreAuthorize("hasAuthority(@confAuthenService.getAdminConfigAuthen())")
 public class AdminConfigSidemenuController {
