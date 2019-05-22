@@ -30,6 +30,9 @@ public class SideMenuLevel1Menu {
 	
 	@Column(name="c_authorities")
 	private String authorities;
+
+	@Column(name="block_id")
+	private Long blockId;
 	
 	@JSONField(serialize=false)
 	@Transient
@@ -89,7 +92,13 @@ public class SideMenuLevel1Menu {
 		this.authoritySet = authoritySet;
 	}
 
+	public Long getBlockId() {
+		return blockId;
+	}
 
+	public void setBlockId(Long blockId) {
+		this.blockId = blockId;
+	}
 
 
 }

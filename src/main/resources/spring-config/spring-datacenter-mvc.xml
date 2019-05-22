@@ -110,7 +110,7 @@
 	</mvc:interceptors>
 	
 	<mvc:cors>
-		<mvc:mapping path="/api2/**" allowed-headers="datacenter-token" max-age="3600" />
+		<mvc:mapping path="/api2/**" allowed-headers="datacenter-token,content-type" max-age="3600"  />
 	</mvc:cors>
 	
 	<bean class="cn.sowell.datacenter.resource.ResourceController" >

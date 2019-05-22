@@ -13,10 +13,29 @@
 			<a confirm="确认重载系统数据？" href="admin/config/sidemenu/reload" >
 				<i class="fa fa-bolt"></i>
 			</a>
+			<a title="版块模式" href="javascript:;" on-click="toggleBlocks" >
+				<i class="fa fa-road"></i>
+			</a>
+			<a title="保存" href="javascript:;" on-click="save" >
+				<i class="fa fa-save"></i>
+			</a>
 		</div>
 	</div>
 	<div class="page-body">
-		<div class="col-lg-6">
+		<div class="col-lg-2">
+			<div class="widget radius-bordered block-container">
+				<div class="widget-header bordered-left bordered-lightred separated">
+					<span class="widget-caption">版块列表</span>
+					<div class="widget-buttons">
+						<a href="#" title="保存" style="display: none"><i id="save" class="fa fa-check-square"></i></a>
+						<a href="#" title="添加版块"><i id="add-block" class="fa fa-plus-square"></i></a>
+					</div>
+				</div>
+				<div class="widget-body block-container">
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-5">
 			<div class="widget radius-bordered modules-container">
 				<div class="widget-header bordered-left bordered-blueberry separated">
 					<span class="widget-caption">功能列表</span>
@@ -75,7 +94,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-5">
 			<div class="widget radius-bordered mds-container">
 				<div class="widget-header bordered-left bordered-palegreen separated">
 					<span class="widget-caption">模块列表</span>

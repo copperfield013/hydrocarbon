@@ -32,7 +32,7 @@
 						<tr>
 							<td>${i.index + 1 }</td>
 							<td>${view.title }</td>
-							<td><a class="tab" target="stltmpl_update_${view.statListTemplateId }" href="admin/tmpl/stat/ltmpl/update/${view.statListTemplateId }">${view.statListTemplate.title }</a></td>
+							<td><a class="tab" target="stltmpl_update_${view.statListTemplateId }" href="admin/tmpl/stat/ltmpl/update/${view.statListTemplateId }">${statListMap[view.statListTemplateId].title }</a></td>
 							<td><fmt:formatDate value="${view.updateTime }" pattern="yyyy-MM-dd HH:mm:ss" /> </td>
 							<td>
 								<a target="stat_view_update_${view.id }" href="admin/tmpl/stat/vtmpl/update/${view.id }" class="tab btn btn-info btn-xs edit">

@@ -5,14 +5,17 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 import cn.sowell.copframe.dao.deferedQuery.HibernateRefrectResultTransformer;
 import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.datacenter.model.config.dao.SideMenuDao;
+import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 
@@ -57,6 +60,14 @@ public class SideMenuDaoImpl implements SideMenuDao {
 		Query query = sFactory.getCurrentSession().createQuery(hql);
 		List<SideMenuLevel2Menu> groups = query.list();
 		return CollectionUtils.toListMap(groups, group->group.getSideMenuLevel1Id());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SideMenuBlock> getAllBlocks() {
+		Criteria criteria = sFactory.getCurrentSession().createCriteria(SideMenuBlock.class);
+		criteria.addOrder(Order.asc("order"));
+		return criteria.list();
 	}
 
 }

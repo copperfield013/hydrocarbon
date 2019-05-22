@@ -27,6 +27,7 @@ import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.copframe.utils.TextUtils;
 import cn.sowell.datacenter.model.admin.pojo.ABCUser;
 import cn.sowell.datacenter.model.config.dao.SideMenuDao;
+import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
@@ -59,12 +60,15 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 	@Resource
 	StatViewService statViewService;
 	
+	Map<Long, SideMenuBlock> blockMap;
+	
 	Map<Long, SideMenuLevel1Menu> l1MenuMap;
 	
 	Map<Long, SideMenuLevel2Menu> l2MenuMap;
 	
 	@Override
 	public synchronized void reloadMenuMap() {
+		blockMap = null;
 		l1MenuMap = null;
 		l2MenuMap = null;
 	}
@@ -257,6 +261,27 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 			return null;
 		});
 	}
+
+	@Override
+	public SideMenuBlock getBlock(Long blockId) {
+		return getBlockMap().get(blockId);
+	}
+
+	@Override
+	public List<SideMenuBlock> getAllBlocks() {
+		return new ArrayList<SideMenuBlock>(getBlockMap().values());
+	}
 	
+	private Map<Long, SideMenuBlock> getBlockMap() {
+		if(blockMap == null) {
+			synchronized (this) {
+				if(blockMap == null) {
+					List<SideMenuBlock> blocks = sDao.getAllBlocks();
+					blockMap = CollectionUtils.toMap(blocks, SideMenuBlock::getId);
+				}
+			}
+		}
+		return blockMap;
+	}
 
 }

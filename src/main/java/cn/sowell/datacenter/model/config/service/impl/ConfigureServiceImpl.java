@@ -22,6 +22,7 @@ import cn.sowell.datacenter.entityResolver.config.ModuleConfigureMediator;
 import cn.sowell.datacenter.entityResolver.config.abst.Module;
 import cn.sowell.datacenter.entityResolver.config.param.QueryModuleCriteria;
 import cn.sowell.datacenter.model.config.dao.ConfigureDao;
+import cn.sowell.datacenter.model.config.pojo.SystemConfig;
 import cn.sowell.datacenter.model.config.service.ConfigureService;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroup;
 import cn.sowell.dataserver.model.tmpl.service.TemplateGroupService;
@@ -112,5 +113,32 @@ public class ConfigureServiceImpl implements ConfigureService{
 		jConfig.put("modules", jModules);
 		return jConfig;
 	}
+	
+	SystemConfig globalSystemConfig;
+	
+	@Override
+	public SystemConfig getSystemConfig() {
+		if(globalSystemConfig == null) {
+			synchronized (this) {
+				if(globalSystemConfig == null) {
+					globalSystemConfig = cDao.getSystemConfig();
+				}
+			}
+		}
+		return globalSystemConfig;
+	}
+	
+	@Override
+	public void refreshSystemConfig() {
+		synchronized (this) {
+			globalSystemConfig = null;
+		}
+	}
+	
+	@Override
+	public void updateSystemConfig(SystemConfig sysConfig) {
+		cDao.updateSystemConfig(sysConfig);
+	}
+	
 	
 }

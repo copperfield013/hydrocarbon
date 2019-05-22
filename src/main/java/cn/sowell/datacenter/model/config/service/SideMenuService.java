@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.sowell.copframe.common.UserIdentifier;
+import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 
@@ -22,5 +23,9 @@ public interface SideMenuService {
 	Map<Long, String[]> getMenu2AuthNameMap(Set<Long> level2MenuId);
 
 	void reloadMenuMap();
+
+	SideMenuBlock getBlock(Long blockId);
+
+	List<SideMenuBlock> getAllBlocks();
 
 }

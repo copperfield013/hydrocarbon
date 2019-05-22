@@ -83,7 +83,7 @@ public class Api2TemplateController {
 	
 	
 	@RequestMapping("/ttmpl/{ttmplId}")
-	public ResponseJSON getTreeTemplate(@PathVariable Long ttmplId, ApiUser user) {
+	public ResponseJSON getTreeTemplate(@PathVariable Long ttmplId) {
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		TemplateTreeTemplate ttmpl = treeService.getTemplate(ttmplId);
 		jRes.put("ttmpl", ttmpl);

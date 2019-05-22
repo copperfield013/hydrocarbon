@@ -60,7 +60,7 @@
 														title="选择统计列表模板"
 														choose-key="choose-ltmpl" 
 														crn-choose-ltmpl="title" 
-														>${vtmpl.statListTemplate != null? vtmpl.statListTemplate.title: '选择列表模板' }</a>
+														>${statListTemplate != null? statListTemplate.title: '选择列表模板' }</a>
 													<input type="hidden" crn-choose-ltmpl="id" name="statListTemplateId" value="${vtmpl.statListTemplateId }" />
 												</div>
 											</div>

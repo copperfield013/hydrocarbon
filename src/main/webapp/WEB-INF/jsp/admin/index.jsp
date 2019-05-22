@@ -19,6 +19,41 @@
 	             <div class="sidebar-collapse" id="sidebar-collapse">
 	                    <i class="collapse-icon fa fa-bars"></i>
 	             </div>
+	             <%-- <c:if test="${fn:length(blocks) > 0 ||  sysConfig.showBlocksAnyway == 1}">
+		             <div class="blocks-area">
+		             	<ul>
+		             		<li>
+		             			<a>版块1</a>
+		             			<ul>
+		             				<li>
+		             					<a>菜单1-1</a>
+		             					<ul>
+		             						<li><a>菜单1-1-1</a></li>
+		             						<li><a>菜单1-1-2</a></li>
+		             					</ul>
+		             				</li>
+		             				<li>
+		             					<a>版块1-2</a>
+		             				</li>
+		             			</ul>
+		             		</li>
+		             		<li>
+		             			<a>版块2</a>
+		             			<ul>
+		             				<li>
+		             					<a>版块2-1</a>
+		             				</li>
+		             				<li>
+		             					<a>版块2-2</a>
+		             				</li>
+		             			</ul>
+		             		</li>
+			             	<c:forEach items="${blocks }" var="block">
+			             		
+			             	</c:forEach>
+		             	</ul>
+		             </div>
+	             </c:if> --%>
 	             <div class="account-area">
 	             	<div class="account-view">
 	             		<div class="account-headicon">

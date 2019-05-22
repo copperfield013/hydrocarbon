@@ -7,14 +7,17 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Repository;
 
 import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.datacenter.model.config.dao.ConfigureDao;
 import cn.sowell.datacenter.model.config.pojo.AuthencationConfig;
 import cn.sowell.datacenter.model.config.pojo.ConfigModule;
+import cn.sowell.datacenter.model.config.pojo.SystemConfig;
 
 @Repository
 public class ConfigureDaoImpl implements ConfigureDao{
@@ -41,5 +44,20 @@ public class ConfigureDaoImpl implements ConfigureDao{
 		return sFactory.getCurrentSession().get(AuthencationConfig.class, configId);
 	}
 
-
+	@Override
+	public SystemConfig getSystemConfig() {
+		Criteria c = sFactory.getCurrentSession().createCriteria(SystemConfig.class);
+		c.addOrder(Order.asc("id"));
+		c.setFirstResult(0);
+		c.setMaxResults(1);
+		return (SystemConfig) c.uniqueResult();
+	}
+	
+	@Override
+	public void updateSystemConfig(SystemConfig sysConfig) {
+		SystemConfig originConfig = getSystemConfig();
+		originConfig.setBlockId(sysConfig.getBlockId());
+		originConfig.setShowBlocksAnyway(sysConfig.getShowBlocksAnyway());
+		sFactory.getCurrentSession().update(originConfig);
+	}
 }
