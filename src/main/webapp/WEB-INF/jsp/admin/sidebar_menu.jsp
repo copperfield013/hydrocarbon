@@ -49,27 +49,3 @@
 		</li>
 	</c:if>
 </c:forEach>
-<li>
-	<a href="#" class="menu-dropdown">
-		<i class="menu-icon fa fa-bookmark"></i>
-		<span class="menu-text">demo</span>
-		<i></i>
-	</a>
-	<ul class="submenu">
-	   	<li>
-	   		<a class="tab" href="admin/treeview/treeView?id=2adba5c2ab424be69cedd0f52a776631&mappingName=角色权限" target="treeview" title="树形控件">
-	   			<span class="menu-text">树形控件</span>
-	   		</a>
-	   	</li>
-	   	<li>
-	   		<a class="tab" href="admin/treeview/tree_view_new?id=f0e47e1f25a747a492e3ea0e75f3603b&mappingName=角色权限" target="treeview" title="树形控件">
-	   			<span class="menu-text">树形控件</span>
-	   		</a>
-	   	</li>
-	   		<li>
-	   		<a class="tab" href="admin/relationtreeview/tree_view_new?id=3ad48d5ac71e46e4b99f66ae7cab7158&mappingName=人口信息" target="relationtreeview" title="树形控件">
-	   			<span class="menu-text">关系人口-tree</span>
-	   		</a>
-	   	</li>
-	</ul>
-</li>
