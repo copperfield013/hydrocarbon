@@ -264,7 +264,6 @@ public class AdminModulesController {
 			@PathVariable Long nodeRelationId, 
 			@RequestParam(required=false, defaultValue="10") Integer pageSize, 
 			HttpSession session) {
-		SideMenuLevel2Menu menu = authService.validateL2MenuAccessable(menuId);
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		
 		TreeRelationComposite relationComposite = treeService.getNodeRelationTemplate(nodeRelationId);
@@ -284,7 +283,7 @@ public class AdminModulesController {
 			//在模板中匹配查询结果的Node模板
 			//设置参数
 			query
-				.setModuleName(menu.getTemplateModule())
+				.setModuleName(relationComposite.getNodeTemplate().getModuleName())
 				.setParentEntityCode(parentEntityCode)
 				.setRelationTemplate(relationComposite.getRelationTempalte())
 				.setPageSize(pageSize)

@@ -250,7 +250,7 @@ public class Api2EntityCurdController {
 			//在模板中匹配查询结果的Node模板
 			//设置参数
 			query
-				.setModuleName(relationComposite.getTreeTemplate().getModule())
+				.setModuleName(relationComposite.getNodeTemplate().getModuleName())
 				.setParentEntityCode(parentEntityCode)
 				.setRelationTemplate(relationComposite.getRelationTempalte())
 				.setPageSize(pageSize)
