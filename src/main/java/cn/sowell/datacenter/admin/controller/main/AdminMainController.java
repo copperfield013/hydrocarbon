@@ -1,5 +1,6 @@
 package cn.sowell.datacenter.admin.controller.main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cn.sowell.copframe.common.UserIdentifier;
 import cn.sowell.copframe.dao.utils.UserUtils;
 import cn.sowell.datacenter.admin.controller.AdminConstants;
+import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
+import cn.sowell.datacenter.model.config.pojo.SystemConfig;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
 import cn.sowell.datacenter.model.config.service.ConfigAuthencationService;
+import cn.sowell.datacenter.model.config.service.ConfigureService;
 import cn.sowell.datacenter.model.config.service.NonAuthorityException;
 import cn.sowell.datacenter.model.config.service.SideMenuService;
 
@@ -33,6 +37,9 @@ public class  AdminMainController {
 
 	@Resource
 	ConfigAuthencationService confAuthenService;
+	
+	@Resource
+	ConfigureService configService;
 	
 	@RequestMapping("/login")
 	public String login(@RequestParam(name="error",required=false) String error, Model model){
@@ -61,6 +68,16 @@ public class  AdminMainController {
 				l1disables.put(l1.getId(), true);
 			}
 		});
+		SystemConfig sysConfig = configService.getSystemConfig();
+		List<SideMenuBlock> blocks = null;
+		if(sysConfig.getBlockId() != null) {
+			blocks = new ArrayList<SideMenuBlock>();
+			blocks.add(menuService.getBlock(sysConfig.getBlockId()));
+		}else {
+			blocks = menuService.getAllBlocks();
+		}
+		model.addAttribute("sysConfig", sysConfig);
+		model.addAttribute("blocks", blocks);
 		model.addAttribute("user", user);
 		model.addAttribute("menus", menus);
 		model.addAttribute("l1disables", l1disables);

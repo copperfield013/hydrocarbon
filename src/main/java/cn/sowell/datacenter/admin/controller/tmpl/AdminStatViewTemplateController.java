@@ -1,6 +1,7 @@
 package cn.sowell.datacenter.admin.controller.tmpl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.sowell.copframe.dto.ajax.AjaxPageResponse;
+import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.datacenter.admin.controller.AdminConstants;
 import cn.sowell.dataserver.model.modules.pojo.ModuleMeta;
 import cn.sowell.dataserver.model.modules.service.ModulesService;
 import cn.sowell.dataserver.model.statview.service.StatViewService;
+import cn.sowell.dataserver.model.tmpl.pojo.TemplateStatList;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateStatView;
+import cn.sowell.dataserver.model.tmpl.service.StatListTemplateService;
 
 @Controller
 @RequestMapping(AdminConstants.URI_TMPL + "/stat/vtmpl")
@@ -31,6 +35,9 @@ public class AdminStatViewTemplateController {
 	@Resource
 	StatViewService vService;
 	
+	@Resource
+	StatListTemplateService lService;
+	
 	static Logger logger = Logger.getLogger(AdminStatViewTemplateController.class);
 	
 	
@@ -38,7 +45,9 @@ public class AdminStatViewTemplateController {
 	public String list(@PathVariable String moduleName, Model model) {
 		ModuleMeta module = mService.getStatModule(moduleName);
 		List<TemplateStatView> views = vService.queryAll(moduleName);
+		Map<Long, TemplateStatList> statListMap = lService.getTemplateMap(CollectionUtils.toSet(views, TemplateStatView::getStatListTemplateId));
 		model.addAttribute("views", views);
+		model.addAttribute("statListMap", statListMap);
 		model.addAttribute("module", module);
 		return AdminConstants.JSP_TMPL_STATVIEW + "/stat_vtmpl_list.jsp";
 	}
@@ -59,8 +68,10 @@ public class AdminStatViewTemplateController {
 		if(vtmpl != null) {
 			ModuleMeta module = mService.getStatModule(vtmpl.getModule());
 			if(module != null) {
+				TemplateStatList statListTemplate = lService.getTemplate(vtmpl.getStatListTemplateId());
 				model.addAttribute("module", module);
 				model.addAttribute("vtmpl", vtmpl);
+				model.addAttribute("statListTemplate", statListTemplate);
 				return AdminConstants.JSP_TMPL_STATVIEW + "/stat_vtmpl_update.jsp";
 			}
 		}

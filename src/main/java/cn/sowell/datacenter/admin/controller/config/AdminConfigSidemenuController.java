@@ -35,6 +35,7 @@ import cn.sowell.datacenter.entityResolver.config.abst.Module;
 import cn.sowell.datacenter.model.admin.pojo.ABCUser;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
+import cn.sowell.datacenter.model.config.pojo.SystemConfig;
 import cn.sowell.datacenter.model.config.pojo.criteria.AuthorityCriteria;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
 import cn.sowell.datacenter.model.config.service.ConfigureService;
@@ -94,6 +95,8 @@ public class AdminConfigSidemenuController {
 		
 		Map<String, StatModuleDetail> statDetailMap = statViewService.getStatModuleDetail(moduleNames);
 		
+		SystemConfig sysConfig = configService.getSystemConfig();
+		model.addAttribute("systemConfig", sysConfig);
 		JSONObject config = configService.getModuleConfigJson();
 		model.addAttribute("config", config);
 		model.addAttribute("modules", modules);
@@ -112,8 +115,9 @@ public class AdminConfigSidemenuController {
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		JSONObject req = jReq.getJsonObject();
 		try {
-			List<SideMenuLevel1Menu> modules = toMenuModules(req);
-			menuService.updateSideMenuModules(UserUtils.getCurrentUser(), modules);
+			List<SideMenuLevel1Menu> l1Menus = toMenuModules(req);
+			
+			menuService.updateSideMenuModules(UserUtils.getCurrentUser(), l1Menus);
 			jRes.setStatus("suc");
 		} catch (Exception e) {
 			jRes.setStatus("error");
