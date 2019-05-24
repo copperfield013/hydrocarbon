@@ -19,6 +19,7 @@
 <link href="${basePath }media/admin/plugins/timeline/jquery.eeyellow.Timeline.css" rel="stylesheet" type="text/css" />
 <link href="${basePath }media/admin/plugins/bootstrapt-treeview/dist/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
 <!--  -->
+<link href="media/admin/common/css/index.css" rel="stylesheet" type="text/css" />
 <link href="media/admin/cpf/css/cpf-main.css" rel="stylesheet" type="text/css" />
 <!-- cover beyond styles -->
 <link href="media/admin/main/css/datacenter-cover.css" rel="stylesheet" type="text/css" />

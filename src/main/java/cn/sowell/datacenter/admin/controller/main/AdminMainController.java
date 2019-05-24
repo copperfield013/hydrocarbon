@@ -1,14 +1,15 @@
 package cn.sowell.datacenter.admin.controller.main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -48,9 +49,27 @@ public class  AdminMainController {
 		return "/admin/common/login.jsp";
 	}
 	
-	@RequestMapping({"/", ""})
-	public String index(Model model){
+	@RequestMapping({"/", "", "/block/{blockId}", "/menu/{menuId}"})
+	public String index(@PathVariable(required = false) Long blockId, @PathVariable(required = false) Long menuId, Model model){
 		UserIdentifier user = UserUtils.getCurrentUser();
+		SystemConfig sysConfig = configService.getSystemConfig();
+		SideMenuBlock block = null;
+		if(blockId != null) {
+			block = menuService.getBlock(blockId);
+		}
+		if(menuId != null) {
+			SideMenuLevel2Menu l2Menu = authService.validateUserL2MenuAccessable((UserDetails) user, menuId);
+			if(l2Menu != null) {
+				block = menuService.getBlock(l2Menu.getLevel1Menu().getBlockId());
+			}else {
+				return null;
+			}
+		}
+		if(block == null) {
+			block = menuService.getBlock(sysConfig.getDefaultBlockId());
+		}
+		
+		
 		Map<Long, Boolean> l1disables = new HashMap<Long, Boolean>(),
 					l2disables = new HashMap<Long, Boolean>();
 		List<SideMenuLevel1Menu> menus = menuService.getSideMenuLevelMenus(user);
@@ -68,18 +87,15 @@ public class  AdminMainController {
 				l1disables.put(l1.getId(), true);
 			}
 		});
-		SystemConfig sysConfig = configService.getSystemConfig();
 		List<SideMenuBlock> blocks = null;
-		if(sysConfig.getBlockId() != null) {
-			blocks = new ArrayList<SideMenuBlock>();
-			blocks.add(menuService.getBlock(sysConfig.getBlockId()));
-		}else {
+		if(!Integer.valueOf(1).equals(sysConfig.getOnlyShowDefaultBlock())) {
 			blocks = menuService.getAllBlocks();
 		}
 		model.addAttribute("sysConfig", sysConfig);
 		model.addAttribute("blocks", blocks);
 		model.addAttribute("user", user);
-		model.addAttribute("menus", menus);
+		model.addAttribute("block", block);
+		model.addAttribute("menuId", menuId);
 		model.addAttribute("l1disables", l1disables);
 		model.addAttribute("l2disables", l2disables);
 		model.addAttribute("configAuth", confAuthenService.getAdminConfigAuthen());

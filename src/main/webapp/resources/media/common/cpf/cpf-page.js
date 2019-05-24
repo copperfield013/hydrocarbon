@@ -29,6 +29,11 @@ define(function(require, exports, module){
 			location.href = $(this).attr('href');
 			return false;
 		});
+		$($page).on('click', 'a.open-link[href]', function(){
+			var $this = $(this);
+			window.open($this.attr('href') , '_blank');
+			return false;
+		});
 		var page = $($page).getLocatePage();
 		if(page instanceof Page){
 			if(page.getType() === 'dialog'){

@@ -3,6 +3,7 @@ package cn.sowell.datacenter.jv.controller.main;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,8 +27,10 @@ public class JvMainController extends JvBaseController{
 		return "redirect:/jv/main/index";
 	}
 	
-	@RequestMapping("/index")
-	public String home(ApiUser user) {
+	@RequestMapping({"/index"})
+	public String home(Long blockId, Long menuId, ApiUser user, Model model) {
+		model.addAttribute("blockId", blockId);
+		model.addAttribute("menuId", menuId);
 		return JvConstants.JSP_MAIN + "/index.jsp";
 	}
 }

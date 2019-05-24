@@ -56,7 +56,7 @@ public class ConfigureDaoImpl implements ConfigureDao{
 	@Override
 	public void updateSystemConfig(SystemConfig sysConfig) {
 		SystemConfig originConfig = getSystemConfig();
-		originConfig.setBlockId(sysConfig.getBlockId());
+		originConfig.setDefaultBlockId(sysConfig.getDefaultBlockId());
 		originConfig.setShowBlocksAnyway(sysConfig.getShowBlocksAnyway());
 		sFactory.getCurrentSession().update(originConfig);
 	}

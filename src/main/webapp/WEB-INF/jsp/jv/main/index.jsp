@@ -19,6 +19,9 @@
 	             <div class="sidebar-collapse" id="sidebar-collapse">
 	                    <i class="collapse-icon fa fa-bars"></i>
 	             </div>
+	             <div class="blocks-area" id="blocks-area-nav">
+	             	<style target="blocks"></style>
+	             </div>
 	             <div class="account-area" id="account-area">
 	             	<div class="account-view">
 	             		<div class="account-headicon">
@@ -62,6 +65,7 @@
 	                			<span class="menu-text">主页面</span>
 	                		</a>
 	                	</li>
+	                	<style target="menus"></style>
 					</ul>
 				</div>
 				<div class="page-content">
@@ -130,7 +134,17 @@
 				}
 	    		});
 	    		
-	    		seajs.use('index/js/jv-main.js?v=${cpfVersion}');
+	    		seajs.use('index/js/jv-main.js?v=${cpfVersion}', function(Main){
+	    			Main.deferred.done(function(require){
+	    				seajs.use('index/js/index.js', function(Index){
+	    					Index.init({
+	    	    				$page	: document.body,
+	    	    				blockId	: '${blockId}',
+	    	    				menuId	: '${menuId}'
+		    				});
+	    				});
+	    			});
+	    		});
 	    	});
 	    </script>
 	</body>

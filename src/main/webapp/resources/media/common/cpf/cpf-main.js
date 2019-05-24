@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require, exports, module){
 	/**
 	 * 插件初始化顺序
 	 * 1.tab
@@ -27,7 +27,7 @@ define(function(require){
 	require('paging');
 	require('dialog');
 	require('tree');
-	require('tab');
+	var Tab = require('tab');
 	require('innerpage');
 	require('css');
 	require('control');
@@ -104,5 +104,11 @@ define(function(require){
     try{
     	require('main/js/statis-func.js');
     }catch(e){}
+    exports.openMenu = function(menuId){
+    	var $link = $('#sidebar a[l2-menu-id="' + menuId +  '"]');
+    	$link.closest('[l1-menu-id]').find('.menu-dropdown').trigger('click');
+    	$link.trigger('click');
+    };
+    
     $CPF.closeLoading();
 });

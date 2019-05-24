@@ -21,6 +21,7 @@ import cn.sowell.datacenter.common.ApiUser;
 import cn.sowell.datacenter.model.admin.pojo.ABCUser;
 import cn.sowell.datacenter.model.config.bean.ValidateDetailParamter;
 import cn.sowell.datacenter.model.config.bean.ValidateDetailResult;
+import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.pojo.criteria.AuthorityCriteria;
@@ -66,6 +67,27 @@ public class AuthorityServiceImpl implements AuthorityService{
 		return this.validateUserL1MenuAccessable((UserDetails) UserUtils.getCurrentUser(), level1MenuId);
 	}
 
+	@Override
+	public SideMenuBlock validateUserBlockAccessable(UserDetails user, Long blockId) throws NonAuthorityException {
+		Assert.notNull(blockId, "版块的id不能为空");
+		
+		SideMenuBlock block = menuService.getBlock(blockId);
+		
+		if(block != null) {
+			Set<String> userAuthorities = CollectionUtils.toSet(user.getAuthorities(), GrantedAuthority::getAuthority);
+			
+			//只有当用户至少包含菜单的其中一个权限时，才能验证成功
+			if(!userAuthorities.stream()
+					.filter(auth->block.getAuthoritySet().contains(auth))
+					.findFirst().isPresent()) {
+				throw new NonAuthorityException(block.getAuthoritySet(), userAuthorities);
+			}
+			return block;
+		}else {
+			throw new NonAuthorityException("根据id[" + blockId + "]获得不到对应版块");
+		}
+	}
+	
 	@Override
 	public SideMenuLevel2Menu validateUserL2MenuAccessable(UserDetails user, Long level2MenuId) throws NonAuthorityException{
 		Assert.notNull(level2MenuId, "二级菜单的id不能为空");

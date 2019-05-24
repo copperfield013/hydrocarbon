@@ -9,6 +9,7 @@ import com.abc.auth.pojo.AuthorityVO;
 import cn.sowell.datacenter.common.ApiUser;
 import cn.sowell.datacenter.model.config.bean.ValidateDetailParamter;
 import cn.sowell.datacenter.model.config.bean.ValidateDetailResult;
+import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.pojo.criteria.AuthorityCriteria;
@@ -25,6 +26,8 @@ public interface AuthorityService {
 
 	AuthorityVO getAuthority(String authCode);
 
+	SideMenuBlock validateUserBlockAccessable(UserDetails user, Long blockId) throws NonAuthorityException;
+	
 	SideMenuLevel1Menu validateUserL1MenuAccessable(UserDetails user, Long level1MenuId) throws NonAuthorityException;
 
 	SideMenuLevel2Menu validateUserL2MenuAccessable(UserDetails user, Long level2MenuId) throws NonAuthorityException;
@@ -36,5 +39,7 @@ public interface AuthorityService {
 	ValidateDetailResult validateDetailAuth(ValidateDetailParamter param);
 
 	void validateUserAccessable(UserDetails user, String validateSign);
+
+	
 
 }

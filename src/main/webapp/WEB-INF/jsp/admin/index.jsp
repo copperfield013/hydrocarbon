@@ -19,41 +19,49 @@
 	             <div class="sidebar-collapse" id="sidebar-collapse">
 	                    <i class="collapse-icon fa fa-bars"></i>
 	             </div>
-	             <%-- <c:if test="${fn:length(blocks) > 0 ||  sysConfig.showBlocksAnyway == 1}">
-		             <div class="blocks-area">
+	             <div class="blocks-area">
+					<c:if test="${fn:length(blocks) > 0 ||  sysConfig.showBlocksAnyway == 1}">
 		             	<ul>
-		             		<li>
-		             			<a>版块1</a>
-		             			<ul>
-		             				<li>
-		             					<a>菜单1-1</a>
-		             					<ul>
-		             						<li><a>菜单1-1-1</a></li>
-		             						<li><a>菜单1-1-2</a></li>
-		             					</ul>
-		             				</li>
-		             				<li>
-		             					<a>版块1-2</a>
-		             				</li>
-		             			</ul>
-		             		</li>
-		             		<li>
-		             			<a>版块2</a>
-		             			<ul>
-		             				<li>
-		             					<a>版块2-1</a>
-		             				</li>
-		             				<li>
-		             					<a>版块2-2</a>
-		             				</li>
-		             			</ul>
-		             		</li>
-			             	<c:forEach items="${blocks }" var="block">
-			             		
+			             	<c:forEach items="${blocks }" var="theBlock">
+			             		<li class="${theBlock == block? 'current': ''}">
+			             			<div>
+				             			<a class="open-link" href="admin/block/${theBlock.id}">${theBlock.title }</a>
+				             			<c:if test="${!empty theBlock.l1Menus }">
+					             			<div class="dropdown-icon"><i class="fa fa-caret-down"></i></div>
+				             			</c:if>
+			             			</div>
+			             			<c:if test="${!empty theBlock.l1Menus }">
+			             				<ul>
+			             					<c:forEach items="${theBlock.l1Menus }" var="l1Menu">
+			             						<c:if test="${l1disables[l1Menu.id] != true }">
+				             						<li>
+						             					<div>
+						             						<a>${l1Menu.title }</a>
+						             						<c:if test="${!empty l1Menu.level2s }">
+							             						<div class="dropdown-icon"><i class="fa fa-caret-down"></i></div>
+						             						</c:if>
+						             					</div>
+						             					<c:if test="${!empty l1Menu.level2s }">
+						             						<ul>
+						             							<c:forEach items="${l1Menu.level2s }" var="l2Menu">
+						             								<c:if test="${l2disables[l2Menu.id] != true }">
+							             								<li>
+									             							<div><a class="open-link" href="admin/menu/${l2Menu.id }">${l2Menu.title }</a></div>
+									             						</li>
+						             								</c:if>
+						             							</c:forEach>
+						             						</ul>
+						             					</c:if>
+						             				</li>
+			             						</c:if>
+			             					</c:forEach>
+			             				</ul>
+			             			</c:if>
+			             		</li>
 			             	</c:forEach>
 		             	</ul>
-		             </div>
-	             </c:if> --%>
+		             </c:if>
+	             </div>
 	             <div class="account-area">
 	             	<div class="account-view">
 	             		<div class="account-headicon">
@@ -83,19 +91,7 @@
              				</a>
              			</div>
              		</div>
-	             	
 	             </div>
-	             
-	             <%-- 
-	             <div class="cmd-right">
-	             	<span class="user-name">
-		             	<a class="tab" href="admin/config/user/detail/" target="user_detail" title="用户信息">
-		             		${user.nickname }
-		             	</a>
-	             	</span>
-	                <a class="jump" href="admin/logout">退出登录</a>
-	             </div> --%>
-
 			</div>
 		</div>
 	    <div class="main-container container-fluid">
@@ -172,7 +168,12 @@
 				}
 	    		});
 	    		
-	    		seajs.use('COMMON/cpf/cpf-main.js?v=${cpfVersion}');
+	    		seajs.use(['COMMON/cpf/cpf-main.js?v=${cpfVersion}'], function(Main){
+	    			var menuId = '${menuId}';
+	    			if(menuId){
+	    				Main.openMenu(menuId);
+	    			}
+	    		});
 	    	});
 	    </script>
 	</body>

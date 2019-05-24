@@ -1,6 +1,8 @@
 package cn.sowell.datacenter.model.config.pojo;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import cn.sowell.copframe.utils.TextUtils;
 
 @Entity
 @Table(name="t_sa_config_sidemenu_block")
@@ -28,7 +32,6 @@ public class SideMenuBlock {
 	
 	@Transient
 	private List<SideMenuLevel1Menu> l1Menus;
-	
 	
 	public List<SideMenuLevel1Menu> getL1Menus() {
 		return l1Menus;
@@ -59,6 +62,22 @@ public class SideMenuBlock {
 	}
 	public void setOrder(String order) {
 		this.order = order;
+	}
+	
+	@Transient
+	private Set<String> authoritySet;
+	public Set<String> getAuthoritySet() {
+		if(this.authoritySet == null) {
+			synchronized (this) {
+				if(this.authoritySet == null) {
+					this.authoritySet = new LinkedHashSet<String>();
+					if(this.authorities != null) {
+						this.authoritySet = TextUtils.split(this.authorities, ";");
+					}
+				}
+			}
+		}
+		return this.authoritySet;
 	}
 	
 }

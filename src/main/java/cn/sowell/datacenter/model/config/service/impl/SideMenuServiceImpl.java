@@ -277,6 +277,11 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 			synchronized (this) {
 				if(blockMap == null) {
 					List<SideMenuBlock> blocks = sDao.getAllBlocks();
+					Map<Long, List<SideMenuLevel1Menu>> blockL1MenuMap = CollectionUtils.toListMap(getL1MenuMap().values(), SideMenuLevel1Menu::getBlockId);
+					for (SideMenuBlock block : blocks) {
+						List<SideMenuLevel1Menu> l1Menus = blockL1MenuMap.get(block.getId());
+						block.setL1Menus(l1Menus);
+					}
 					blockMap = CollectionUtils.toMap(blocks, SideMenuBlock::getId);
 				}
 			}

@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require, exports){
 	/**
 	 * 插件初始化顺序
 	 * 1.tab
@@ -19,7 +19,7 @@ define(function(require){
 	 * 11.control
 	 * 
 	 */
-	
+	var defer = $.Deferred();
 	var $CPF = require('$CPF');
 	require('ajax');
 	var Page = require('page');
@@ -69,14 +69,10 @@ define(function(require){
     		$accountArea.removeClass('open');
     	});
     });
-    
+    defer.resolve(require);
+    exports.deferred = defer.promise();
     /*try{
     	require('main/js/statis-func.js');
     }catch(e){}*/
-    seajs.use('index/js/index.js', function(Index){
-		Index.init({
-			$page	: document.body
-		});
-		$CPF.closeLoading();
-	});
+    
 });

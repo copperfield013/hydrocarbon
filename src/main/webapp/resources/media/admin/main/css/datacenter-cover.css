@@ -7,10 +7,17 @@
 	line-height:50px;
 }
 .navbar .navbar-inner {
-	min-height: 50px;
+	height: 50px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: stretch;
 }
 .navbar .sidebar-collapse {
 	height: 50px;
+	position: relative;
+	left: unset;
+	top: unset;
 }
 .navbar .sidebar-collapse .collapse-icon {
 	padding: 14px 5px;
@@ -18,6 +25,7 @@
 .navbar-header.pull-left {
 	height: 50px;
 	line-height: 50px;
+	width: 189px;
 }
 /* 左侧slider样式覆盖 */
 .page-sidebar {
