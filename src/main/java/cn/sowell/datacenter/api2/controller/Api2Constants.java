@@ -13,6 +13,8 @@ public interface Api2Constants {
 	
 	
 	final String URI_ENTITY = URI_BASE + "/entity";
+	
+	final String URI_CONFIG = URI_BASE + "/config";
 
 	final String KEY_FUSE_MODE = "%fuseMode%";
 

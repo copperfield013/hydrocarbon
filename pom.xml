@@ -11,8 +11,9 @@
 	<properties>
 		<version.kie>7.10.0.Final</version.kie>
 		<version.abcitem>4.2.60.alphal</version.abcitem>
-		<version.dataserver>1.26</version.dataserver>
+		<version.dataserver>1.27</version.dataserver>
 		<version.cpfweb>0.2.14</version.cpfweb>
+		<version.cpfutils>0.3.19</version.cpfutils>
 		<version.cpfspring>0.3.20</version.cpfspring>
 		<version.abcbizz>2.1.15</version.abcbizz>
 		<version.authbiz>0.0.21</version.authbiz>
@@ -41,8 +42,19 @@
 		</dependency>
 		<dependency>
 			<groupId>cn.sowell.copframe</groupId>
+			<artifactId>cpf-utils</artifactId>
+			<version>${version.cpfutils}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.sowell.copframe</groupId>
 			<artifactId>cpf-spring</artifactId>
 			<version>${version.cpfspring}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>cn.sowell.copframe</groupId>
+					<artifactId>cpf-utils</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>cn.sowell.copframe</groupId>

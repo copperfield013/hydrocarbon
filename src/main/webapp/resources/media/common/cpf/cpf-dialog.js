@@ -35,6 +35,7 @@ define(function(require, exports, module){
 			id			: utils.uuid(5, 32),
 			title		: '标题',
 			content		: '',
+			autoClose	: true,
 			onShow		: $.noop,
 			onClose		: $.noop,
 			onSubmit	: $.noop,
@@ -265,11 +266,13 @@ define(function(require, exports, module){
 			$(submitSelector, $footer).click(function(){
 				var forForm = $($(this).attr('for'), $content);
 				var data = _this.getPage().trigger('footer-submit', []);
-				if(typeof param.onSubmit !== 'function' || param.onSubmit.apply(this, [data]) !== false){
+				if(typeof param.onSubmit !== 'function' || param.onSubmit.apply(this, [data, function(){page.close()}]) !== false){
 					try{
 						forForm.submit();
 					}catch(e){}
-					page.close();
+					if(param.autoClose){
+						page.close();
+					}
 				}
 			});
 			$(resetSelector, $footer).click(function(){

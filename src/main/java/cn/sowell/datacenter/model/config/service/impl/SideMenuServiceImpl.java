@@ -27,10 +27,12 @@ import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.copframe.utils.TextUtils;
 import cn.sowell.datacenter.model.admin.pojo.ABCUser;
 import cn.sowell.datacenter.model.config.dao.SideMenuDao;
+import cn.sowell.datacenter.model.config.pojo.CustomPage;
 import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
+import cn.sowell.datacenter.model.config.service.CustomPageService;
 import cn.sowell.datacenter.model.config.service.SideMenuService;
 import cn.sowell.dataserver.model.modules.pojo.ModuleMeta;
 import cn.sowell.dataserver.model.modules.service.ModulesService;
@@ -60,6 +62,9 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 	@Resource
 	StatViewService statViewService;
 	
+	@Resource
+	CustomPageService customPageService;
+	
 	Map<Long, SideMenuBlock> blockMap;
 	
 	Map<Long, SideMenuLevel1Menu> l1MenuMap;
@@ -81,6 +86,20 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 				.forEach(l2->{
 					l2.setTemplateGroupTitle(tmplGroup.getTitle());
 					l2.setTemplateGroupKey(tmplGroup.getKey());
+				});
+		});
+		statViewService.bindStatViewReloadEvent(statView->{
+			l2MenuMap.values().stream()
+				.filter(l2->statView.getId().equals(l2.getStatViewId()))
+				.forEach(l2->{
+					l2.setStatViewTitle(statView.getTitle());
+				});
+		});
+		customPageService.bindCustomPageReloadEvent(customPage->{
+			l2MenuMap.values().stream()
+				.filter(l2->customPage.getId().equals(l2.getCustomPageId()))
+				.forEach(l2->{
+					l2.setCustomPageTitle(customPage.getTitle());
 				});
 		});
 	}
@@ -110,6 +129,15 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 					while(itr.hasNext()) {
 						SideMenuLevel2Menu l2 = itr.next();
 						String moduleName = null;
+						//转换权限字符串
+						String l2Authorities = l2.getAuthorities();
+						if(l2Authorities != null) {
+							String[] split = l2Authorities.split(";");
+							for (String auth : split) {
+								if(TextUtils.hasText(auth))
+									l2.getAuthoritySet().add(auth);
+							}
+						}
 						if(l2.getTemplateGroupId() != null) {
 							TemplateGroup tmplGroup = tmplGroupService.getTemplate(l2.getTemplateGroupId());
 							if(tmplGroup != null) {
@@ -123,23 +151,21 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 								l2.setStatViewTitle(statView.getTitle());
 								moduleName = statView.getModule();
 							}
+						}else if(l2.getCustomPageId() != null) {
+							CustomPage customPage = customPageService.getCustomPage(l2.getCustomPageId());
+							if(customPage != null) {
+								l2.setCustomPageTitle(customPage.getTitle());
+								l2.setCustomPagePath(customPage.getPath());
+								continue;
+							}
 						}
+						
 						if(moduleName != null) {
 							ModuleMeta module = mService.getModule(moduleName);
 							if(module != null) {
 								l2.setTemplateModuleTitle(module.getTitle());
 								l2.setTemplateModule(module.getName());
 								l2.setLevel1Menu(level1);
-								
-								//转换权限字符串
-								String l2Authorities = l2.getAuthorities();
-								if(l2Authorities != null) {
-									String[] split = l2Authorities.split(";");
-									for (String auth : split) {
-										if(TextUtils.hasText(auth))
-											l2.getAuthoritySet().add(auth);
-									}
-								}
 								continue ;
 							}
 						}
@@ -241,6 +267,17 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 	}
 	
 	@Override
+	public Map<Long, String[]> getBlockAuthNameMap(Set<Long> blockIds) {
+		return getMenuAuthNameMap(blockIds, blockId->{
+			SideMenuBlock block = getBlock(blockId);
+			if(block != null) {
+				return block.getAuthoritySet();
+			}
+			return null;
+		});
+	}
+	
+	@Override
 	public Map<Long, String[]> getMenu1AuthNameMap(Set<Long> level1MenuId) {
 		return getMenuAuthNameMap(level1MenuId, l1MenuId->{
 			SideMenuLevel1Menu menu = getLevel1Menu(l1MenuId);
@@ -280,7 +317,11 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 					Map<Long, List<SideMenuLevel1Menu>> blockL1MenuMap = CollectionUtils.toListMap(getL1MenuMap().values(), SideMenuLevel1Menu::getBlockId);
 					for (SideMenuBlock block : blocks) {
 						List<SideMenuLevel1Menu> l1Menus = blockL1MenuMap.get(block.getId());
-						block.setL1Menus(l1Menus);
+						if(l1Menus != null) {
+							block.setL1Menus(l1Menus);
+						}else {
+							block.setL1Menus(new ArrayList<SideMenuLevel1Menu>());
+						}
 					}
 					blockMap = CollectionUtils.toMap(blocks, SideMenuBlock::getId);
 				}
@@ -289,4 +330,58 @@ public class SideMenuServiceImpl implements SideMenuService, InitializingBean{
 		return blockMap;
 	}
 
+	@Override
+	public void updateSideMenuBlocks(List<SideMenuBlock> blocks) {
+		CollectionUpdateStrategy<SideMenuBlock> updateBlocks = 
+				new CollectionUpdateStrategy<SideMenuBlock>(SideMenuBlock.class, nDao, SideMenuBlock::getId);
+		
+		CollectionUpdateStrategy<SideMenuLevel1Menu> updateL1Menus = 
+				new CollectionUpdateStrategy<SideMenuLevel1Menu>(SideMenuLevel1Menu.class, nDao, SideMenuLevel1Menu::getId);
+		
+		CollectionUpdateStrategy<SideMenuLevel2Menu> updateL2Menus = 
+				new CollectionUpdateStrategy<SideMenuLevel2Menu>(SideMenuLevel2Menu.class, nDao, SideMenuLevel2Menu::getId);
+		
+		//设置模块编辑策略
+		updateBlocks.setBeforeUpdate((origin, block)->{
+			origin.setTitle(block.getTitle());
+			origin.setOrder(block.getOrder());
+			origin.setAuthorities(block.getAuthorities());
+		});
+		updateBlocks.setAfterUpdate((origin, block)->{
+			block.getL1Menus().forEach(l1Menu->l1Menu.setBlockId(origin.getId()));
+			updateL1Menus.doUpdate(origin.getL1Menus(), block.getL1Menus());
+		});
+		updateBlocks.setAfterCreate(block->{
+			block.getL1Menus().forEach(l1Menu->l1Menu.setBlockId(block.getId()));
+			updateL1Menus.doUpdate(null, block.getL1Menus());
+		});
+		
+		//设置一级菜单编辑策略
+		updateL1Menus.setBeforeUpdate((origin, l1Menu)->{
+			origin.setTitle(l1Menu.getTitle());
+			origin.setOrder(l1Menu.getOrder());
+			origin.setAuthorities(l1Menu.getAuthorities());
+		});
+		updateL1Menus.setAfterUpdate((origin, l1Menu)->{
+			l1Menu.getLevel2s().forEach(l2Menu->l2Menu.setSideMenuLevel1Id(origin.getId()));
+			updateL2Menus.doUpdate(origin.getLevel2s(), l1Menu.getLevel2s());
+		});
+		updateL1Menus.setAfterCreate(l1Menu->{
+			l1Menu.getLevel2s().forEach(l2Menu->l2Menu.setSideMenuLevel1Id(l1Menu.getId()));
+			updateL2Menus.doUpdate(null, l1Menu.getLevel2s());
+		});
+		
+		//设置二级菜单编辑策略
+		updateL2Menus.setBeforeUpdate((origin, l2Menu)->{
+			origin.setOrder(l2Menu.getOrder());
+			origin.setTitle(l2Menu.getTitle());
+			origin.setAuthorities(l2Menu.getAuthorities());
+		});
+		
+		List<SideMenuBlock> originBlocks = getAllBlocks();
+		updateBlocks.doUpdate(originBlocks, blocks);
+		reloadMenuMap();
+	}
+	
+	
 }

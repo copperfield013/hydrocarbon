@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import cn.sowell.datacenter.model.config.pojo.MenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.dataserver.model.modules.pojo.ModuleMeta;
@@ -20,6 +21,6 @@ public interface MetaJsonService {
 
 	JSONObject toButtonStatus(TemplateGroup tmplGroup);
 
-	JSONArray convertBlocksJson(List<SideMenuBlock> blocks, UserDetails user);
+	List<MenuBlock> convertBlocksJson(List<SideMenuBlock> blocks, UserDetails user);
 
 }

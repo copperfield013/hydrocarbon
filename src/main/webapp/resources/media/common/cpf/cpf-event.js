@@ -1,8 +1,10 @@
 define(function(require, exports, module){
 	var EVENT_MAP = {
-		'on-click' 	: 'click',
-		'on-change'	: 'change',
-		'on-input'	: 'input'
+		'on-click' 		: 'click',
+		'on-change'		: 'change',
+		'on-input'		: 'input',
+		'on-dblclick'	: 'dblclick',
+		'on-render'		: null
 	};
 	exports.bindScopeEvent = function($scope, events, doWithObj, retainAttr){
 		for(var eventName in EVENT_MAP){
@@ -25,16 +27,21 @@ define(function(require, exports, module){
 									args = eval(exp);
 								}catch(e){
 									console.error($this[0]);
-									$.error(_this.getPath() + '模板中无法解析的表达式' + exp);
+									$.error('模板中无法解析的表达式' + exp);
 								}
 							}
 						}
-						
 						if(events[callbackName]){
-							$this.on(EVENT_MAP[eventName], callbackParam? function(e){
-								e.preventDefault();
-								events[callbackName].apply(this, args.concat($.merge([], arguments).slice(1)));
-							}: events[callbackName]);
+							if(eventName === 'on-render'){
+								callbackParam? 
+									events[callbackName].apply(this, args.concat($.merge([], arguments).slice(1)))
+									: events[callbackName].apply(this)
+							}else{
+								$this.on(EVENT_MAP[eventName], callbackParam? function(e){
+									e.preventDefault();
+									return events[callbackName].apply(this, args.concat($.merge([], arguments).slice(1)));
+								}: events[callbackName]);
+							}
 						}
 					}
 					if(retainAttr == false){

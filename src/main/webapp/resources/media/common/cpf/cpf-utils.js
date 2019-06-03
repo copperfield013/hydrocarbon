@@ -26,6 +26,9 @@ define(function(require, exports){
 			}
 			return str;
 		},
+		removeElement: function(array, ele){
+			return array.splice(array.indexOf(ele), 1);
+		},
 		startsWith	: function(source, snippit){
 			if (snippit == null || snippit == "" || source.length == 0
 					|| snippit.length > source.length)
@@ -1070,6 +1073,7 @@ define(function(require, exports){
 	function Context(_properties){
 		this.properties = $.extend({}, _properties);
 		this.callbacksMap = {}
+		this.selfishCallbacksMap = {};
 	}
 	Context.prototype.getStatus = function(propertyName, defValue){
 		if(this.properties.hasOwnProperty(propertyName)){
@@ -1119,6 +1123,12 @@ define(function(require, exports){
 	
 	Context.prototype.bind = function(propertyName, callback){
 		exports.assert(typeof propertyName == 'string' && !!propertyName, '第一个参数必须是不为空的字符串');
+		if($.isArray(callback)){
+			for(var i = 0; i < callback.length; i++){
+				this.bind(propertyName, callback[i]);
+			}
+			return this;
+		}
 		exports.assert(typeof callback == 'function', '第二个参数必须是函数对象');
 		if(!this.callbacksMap[propertyName]){
 			this.callbacksMap[propertyName] = $.Callbacks('stopOnFalse');
@@ -1130,9 +1140,35 @@ define(function(require, exports){
 	Context.prototype.trigger = function(propertyName, parameters){
 		if(this.callbacksMap[propertyName]){
 			this.callbacksMap[propertyName].fireWith(this, parameters);
+			var selfishCallbacks = this.selfishCallbacksMap[propertyName];
+			if(selfishCallbacks && !selfishCallbacks.trigged && this.getStatus(propertyName)){
+				selfishCallbacks.trigged = true;
+				selfishCallbacks.callbacks.fireWith(this, parameters);
+				selfishCallbacks.callbacks.empty();
+			}
 		}
 		return this;
 	}
+	
+	/**
+	 * 当字段第一次被设置不为空值的时候，触发callback
+	 * 后面再次修改字段值的时候将不会触发
+	 */
+	Context.prototype.selfish = function(propertyName, callback){
+		var value = this.getStatus(propertyName);
+		if(!value){
+			if(!this.selfishCallbacksMap[propertyName]){
+				this.selfishCallbacksMap[propertyName] = {
+					trigged 	: false,
+					callbacks	: $.Callbacks()
+				};
+			}
+			this.selfishCallbacksMap[propertyName].callbacks.add(callback);
+		}else{
+			callback.apply(this, [value]);
+		}
+	}
+	
 	exports.createContext = exports.createStatus = function(f){return new Context(f)}
 	
 	/**

@@ -1,5 +1,6 @@
 package cn.sowell.datacenter.model.config.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.pojo.criteria.AuthorityCriteria;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
+import cn.sowell.datacenter.model.config.service.ConfigAuthencationService;
 import cn.sowell.datacenter.model.config.service.ConfigUserService;
 import cn.sowell.datacenter.model.config.service.NonAuthorityException;
 import cn.sowell.datacenter.model.config.service.SideMenuService;
@@ -226,6 +228,22 @@ public class AuthorityServiceImpl implements AuthorityService{
 			result.setDetailTemplate(dtmpl);
 		}
 		return result;
+	}
+	
+	
+	@Resource
+	ConfigAuthencationService configAuthService;
+	
+	@Override
+	public void validateAdminAuth(UserDetails user) {
+		String configAuth = configAuthService.getAdminConfigAuthen();
+		Collection<? extends GrantedAuthority> auths = user.getAuthorities();
+		for (GrantedAuthority auth : auths) {
+			if(auth.getAuthority().equals(configAuth)) {
+				return;
+			}
+		}
+		throw new NonAuthorityException("当前用户没有管理员权限，拒绝访问");
 	}
 
 

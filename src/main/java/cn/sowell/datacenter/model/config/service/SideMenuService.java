@@ -18,6 +18,8 @@ public interface SideMenuService {
 
 	SideMenuLevel1Menu getLevel1Menu(Long menuId);
 
+	Map<Long, String[]> getBlockAuthNameMap(Set<Long> set);
+	
 	Map<Long, String[]> getMenu1AuthNameMap(Set<Long> level1MenuId);
 
 	Map<Long, String[]> getMenu2AuthNameMap(Set<Long> level2MenuId);
@@ -27,5 +29,7 @@ public interface SideMenuService {
 	SideMenuBlock getBlock(Long blockId);
 
 	List<SideMenuBlock> getAllBlocks();
+
+	void updateSideMenuBlocks(List<SideMenuBlock> blocks);
 
 }

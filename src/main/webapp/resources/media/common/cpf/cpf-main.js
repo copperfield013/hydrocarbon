@@ -32,6 +32,8 @@ define(function(require, exports, module){
 	require('css');
 	require('control');
 	require('checkbox');
+	require('event');
+	require('tmpl');
 	require('field/js/field-search.js')
 	$CPF.putPageInitSequeue(12, function($page){
 		$(':text.dtrangepicker', $page).each(function(){

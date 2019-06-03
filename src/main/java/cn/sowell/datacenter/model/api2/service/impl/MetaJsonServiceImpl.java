@@ -1,5 +1,6 @@
 package cn.sowell.datacenter.model.api2.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,10 +8,11 @@ import javax.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.sowell.datacenter.model.api2.service.MetaJsonService;
+import cn.sowell.datacenter.model.config.pojo.MenuBlock;
+import cn.sowell.datacenter.model.config.pojo.MenuLevel1;
 import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
@@ -67,35 +69,42 @@ public class MetaJsonServiceImpl implements MetaJsonService{
 	}
 
 	@Override
-	public JSONArray convertBlocksJson(List<SideMenuBlock> blocks, UserDetails user) {
-		JSONArray jBlocks = new JSONArray();
+	public List<MenuBlock> convertBlocksJson(List<SideMenuBlock> blocks, UserDetails user) {
+		List<MenuBlock> jBlocks = new ArrayList<MenuBlock>();
 		for (SideMenuBlock block : blocks) {
 			try {
-				authService.validateUserBlockAccessable(user, block.getId());
-				JSONObject jBlock = new JSONObject();
+				if(user != null) {
+					authService.validateUserBlockAccessable(user, block.getId());
+				}
+				MenuBlock jBlock = new MenuBlock();
 				jBlocks.add(jBlock);
-				jBlock.put("id", block.getId());
-				jBlock.put("title", block.getTitle());
-				jBlock.put("authorities", block.getAuthorities());
+				jBlock.setId(block.getId());
+				jBlock.setTitle(block.getTitle());
+				jBlock.setOrder(block.getOrder());
+				jBlock.setAuthorities(block.getAuthorities());
 				if(block.getL1Menus() != null) {
-					JSONArray jL1Menus = new JSONArray();
-					jBlock.put("l1Menus", jL1Menus);
+					List<MenuLevel1>  jL1Menus = new ArrayList<MenuLevel1>();
+					jBlock.setL1Menus(jL1Menus);
 					for (SideMenuLevel1Menu l1Menu : block.getL1Menus()) {
 						try {
-							authService.validateUserL1MenuAccessable(user, l1Menu.getId());
-							JSONObject jL1Menu = new JSONObject();
-							jL1Menu.put("id", l1Menu.getId());
-							jL1Menu.put("title", l1Menu.getTitle());
-							jL1Menu.put("authorities", l1Menu.getAuthorities());
-							jL1Menu.put("order", l1Menu.getOrder());
+							if(user != null) {
+								authService.validateUserL1MenuAccessable(user, l1Menu.getId());
+							}
+							MenuLevel1 jL1Menu = new MenuLevel1();
+							jL1Menu.setId(l1Menu.getId());
+							jL1Menu.setTitle(l1Menu.getTitle());
+							jL1Menu.setAuthorities(l1Menu.getAuthorities());
+							jL1Menu.setOrder(l1Menu.getOrder());
 							jL1Menus.add(jL1Menu);
 							if(l1Menu.getLevel2s() != null) {
-								JSONArray jL2Menus = new JSONArray();
-								jL1Menu.put("l2Menus", jL2Menus);
+								List<SideMenuLevel2Menu> l2Menus = new ArrayList<SideMenuLevel2Menu>();
+								jL1Menu.setL2Menus(l2Menus);
 								for (SideMenuLevel2Menu l2Menu : l1Menu.getLevel2s()) {
 									try {
-										authService.validateUserL2MenuAccessable(user, l2Menu.getId());
-										jL2Menus.add(l2Menu);
+										if(user != null) {
+											authService.validateUserL2MenuAccessable(user, l2Menu.getId());
+										}
+										l2Menus.add(l2Menu);
 									} catch (Exception e) {}
 								}
 							}

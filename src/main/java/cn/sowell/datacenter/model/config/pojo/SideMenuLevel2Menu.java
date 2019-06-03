@@ -54,6 +54,14 @@ public class SideMenuLevel2Menu {
 	@Column(name="tmpl_module")
 	private String templateModule;
 	
+	@Column(name="custom_page_id")
+	private Long customPageId;
+	
+	@Transient
+	private String customPageTitle; 
+	
+	@Transient
+	private String customPagePath;
 	
 	@Transient
 	@Column(name="tmpl_module_title")
@@ -188,6 +196,30 @@ public class SideMenuLevel2Menu {
 
 	public void setStatViewTitle(String statViewTitle) {
 		this.statViewTitle = statViewTitle;
+	}
+
+	public Long getCustomPageId() {
+		return customPageId;
+	}
+
+	public void setCustomPageId(Long customPageId) {
+		this.customPageId = customPageId;
+	}
+
+	public String getCustomPageTitle() {
+		return customPageTitle;
+	}
+
+	public void setCustomPageTitle(String customPageTitle) {
+		this.customPageTitle = customPageTitle;
+	}
+
+	public String getCustomPagePath() {
+		return customPagePath;
+	}
+
+	public void setCustomPagePath(String customPagePath) {
+		this.customPagePath = customPagePath;
 	}
 
 

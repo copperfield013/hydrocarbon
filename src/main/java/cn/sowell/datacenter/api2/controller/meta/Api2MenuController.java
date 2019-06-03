@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 
 import cn.sowell.copframe.dto.ajax.JSONObjectResponse;
 import cn.sowell.copframe.dto.ajax.ResponseJSON;
 import cn.sowell.datacenter.api2.controller.Api2Constants;
 import cn.sowell.datacenter.common.ApiUser;
 import cn.sowell.datacenter.model.api2.service.MetaJsonService;
+import cn.sowell.datacenter.model.config.pojo.MenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
@@ -47,7 +47,7 @@ public class Api2MenuController {
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		SystemConfig sysConfig = configService.getSystemConfig();
 		List<SideMenuBlock> blocks = menuService.getAllBlocks();
-		JSONArray jBlocks = mJsonService.convertBlocksJson(blocks, user);
+		List<MenuBlock> jBlocks = mJsonService.convertBlocksJson(blocks, user);
 		SideMenuBlock currentBlock = null;
 		if(blockId != null) {
 			currentBlock = menuService.getBlock(blockId);

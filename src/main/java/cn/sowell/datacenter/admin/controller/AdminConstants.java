@@ -129,6 +129,8 @@ public interface AdminConstants {
 
 	final String JSP_CONFIG_SIDEMENU = JSP_CONFIG + "/sidemenu";
 
+	final String JSP_CONFIG_MENU = JSP_CONFIG + "/menu";
+	
 	final String JSP_CONFIG_USER = JSP_CONFIG + "/user";
 
 	final String KEY_FUSE_MODE = "%fuseMode%";
@@ -136,21 +138,6 @@ public interface AdminConstants {
 	final String KEY_ACTION_ID = "%actionId%";
 
 	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
 
 	
 	

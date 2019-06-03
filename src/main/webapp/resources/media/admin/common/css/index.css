@@ -46,6 +46,16 @@
     background-color: rgba(88, 88, 100,.4);
 }
 
+li.custom-page-menu-item>div>a {
+    cursor: default;
+    color: #999 !important;
+}
+
+li.custom-page-menu-item {
+    background-color: #2c375e;
+}
+
+
 .blocks-area li>div>.dropdown-icon {
     width: 15px;
     color: #fff;

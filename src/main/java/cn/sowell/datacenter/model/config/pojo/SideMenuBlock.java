@@ -25,7 +25,7 @@ public class SideMenuBlock {
 	private String title;
 	
 	@Column(name="c_order")
-	private String order;
+	private Integer order;
 	
 	@Column(name="c_authorities")
 	private String authorities;
@@ -57,12 +57,6 @@ public class SideMenuBlock {
 	public void setAuthorities(String authorities) {
 		this.authorities = authorities;
 	}
-	public String getOrder() {
-		return order;
-	}
-	public void setOrder(String order) {
-		this.order = order;
-	}
 	
 	@Transient
 	private Set<String> authoritySet;
@@ -78,6 +72,12 @@ public class SideMenuBlock {
 			}
 		}
 		return this.authoritySet;
+	}
+	public Integer getOrder() {
+		return order;
+	}
+	public void setOrder(Integer order) {
+		this.order = order;
 	}
 	
 }

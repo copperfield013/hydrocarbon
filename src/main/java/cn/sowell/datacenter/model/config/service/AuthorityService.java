@@ -40,6 +40,8 @@ public interface AuthorityService {
 
 	void validateUserAccessable(UserDetails user, String validateSign);
 
+	void validateAdminAuth(UserDetails user);
+
 	
 
 }

@@ -9,7 +9,7 @@
 		</a>
 		<ul class="submenu">
 			<li>
-				<a class="tab" href="admin/config/sidemenu" target="sidemenu" title="功能列表管理">
+				<a class="tab" href="admin/config/menu/index" target="sidemenu" title="功能列表管理">
 		   			<span class="menu-text">功能列表管理</span>
 		   		</a>
 			</li>

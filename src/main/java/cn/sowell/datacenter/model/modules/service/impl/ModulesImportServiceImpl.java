@@ -8,7 +8,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -16,10 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -27,9 +31,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Hyperlink;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,6 +63,7 @@ import com.abc.panel.PanelFactory;
 
 import cn.sowell.copframe.common.UserIdentifier;
 import cn.sowell.copframe.dao.utils.NormalOperateDao;
+import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.copframe.utils.FormatUtils;
 import cn.sowell.copframe.utils.PoiUtils;
 import cn.sowell.copframe.utils.TextUtils;
@@ -79,11 +88,14 @@ import cn.sowell.datacenter.model.modules.service.ExportService;
 import cn.sowell.datacenter.model.modules.service.ModulesImportService;
 import cn.sowell.dataserver.model.dict.pojo.DictionaryComposite;
 import cn.sowell.dataserver.model.dict.pojo.DictionaryField;
+import cn.sowell.dataserver.model.dict.pojo.DictionaryOption;
 import cn.sowell.dataserver.model.dict.service.DictionaryService;
 import cn.sowell.dataserver.model.tmpl.strategy.NormalDaoSetUpdateStrategy;
 
 @Service
 public class ModulesImportServiceImpl implements ModulesImportService {
+
+	
 
 	@Resource
 	FusionContextConfigFactory fFactory;
@@ -273,6 +285,9 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		try {
 			XSSFSheet sheet = workbook.createSheet("导入数据");
+			XSSFSheet optionsSheet = workbook.createSheet("枚举字段");
+			
+			CreationHelper createHelper = workbook.getCreationHelper();
 			
 			//导入说明
 			XSSFRow titleRow = sheet.createRow(0);
@@ -287,6 +302,7 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 			
 			CellStyle titleStyle = getTitleStyle(workbook);
 			CellStyle dataStyle = getDataStyle(workbook);
+			CellStyle hyperlinkTitleStyle = getHyperlinkTitleStyle(workbook);
 			
 			sheet.setDefaultColumnStyle(0, dataStyle);
 			XSSFCell numberTitleCell = headerRow.createCell(0);
@@ -299,6 +315,9 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 			Set<ModuleImportTemplateField> fields = tmpl.getFields();
 			if(fields != null) {
 				int columnIndex = 1;
+				ImportTemplateOptionsHandler optionHandler = new ImportTemplateOptionsHandler(optionsSheet);
+				optionHandler.setModuleName(tmpl.getModule());
+				
 				for (ModuleImportTemplateField field : fields) {
 					sheet.setDefaultColumnStyle(columnIndex, dataStyle);
 					XSSFCell titleCell = headerRow.createCell(columnIndex);
@@ -308,6 +327,13 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 					dataCell.setCellType(CellType.STRING);
 					dataCell.setCellStyle(dataStyle);
 					sheet.autoSizeColumn(columnIndex);
+					XSSFCell optionsCell = (XSSFCell) optionHandler.appendOptions(field, optionHandler);
+					if(optionsCell != null) {
+						titleCell.setCellStyle(hyperlinkTitleStyle);
+						Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.DOCUMENT);
+						hyperlink.setAddress("#'" + optionsCell.getSheet().getSheetName() + "'!" + optionsCell.getAddress());
+						titleCell.setHyperlink(hyperlink);
+					}
 					columnIndex++;
 				}
 				
@@ -333,6 +359,17 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 	}
 
 	
+
+
+	private CellStyle getHyperlinkTitleStyle(XSSFWorkbook workbook) {
+		Font hyperlinkFont = workbook.createFont();
+		hyperlinkFont.setBold(true);
+		hyperlinkFont.setUnderline(XSSFFont.U_SINGLE);
+		hyperlinkFont.setColor(IndexedColors.BLUE.getIndex());
+		CellStyle hyperlinkTitleStyle = getTitleStyle(workbook);
+		hyperlinkTitleStyle.setFont(hyperlinkFont);
+		return hyperlinkTitleStyle;
+	}
 
 	private CellStyle descCellStyle(XSSFWorkbook workbook) {
 		XSSFCellStyle style = workbook.createCellStyle();
@@ -542,4 +579,91 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 		return null;
 	}
 
+	
+	private class ImportTemplateOptionsHandler {
+		private Map<Long, Cell> enumFieldCellMap = new HashMap<Long, Cell>();
+		private Map<Long, Cell> compositeLabelCellMap = new HashMap<Long, Cell>();
+		private Sheet optionsSheet;
+		private String moduleName;
+		private int nextOptionsRowNum = 1;
+		private CellStyle titleStyle;
+		private CellStyle optionStyle;
+		public ImportTemplateOptionsHandler(Sheet optionsSheet) {
+			this.optionsSheet = optionsSheet;
+			this.titleStyle = optionsSheet.getWorkbook().createCellStyle();
+			titleStyle.setBorderLeft(BorderStyle.THIN);
+			titleStyle.setBorderTop(BorderStyle.THIN);
+			titleStyle.setBorderBottom(BorderStyle.THIN);
+			titleStyle.setBorderRight(BorderStyle.THIN);
+			titleStyle.setAlignment(HorizontalAlignment.CENTER);
+			Font titleFont = optionsSheet.getWorkbook().createFont();
+			titleFont.setBold(true);
+			titleFont.setFontName("宋体");
+			titleStyle.setFont(titleFont);
+			
+			this.optionStyle = optionsSheet.getWorkbook().createCellStyle();
+			optionStyle.setBorderLeft(BorderStyle.THIN);
+			optionStyle.setBorderTop(BorderStyle.THIN);
+			optionStyle.setBorderBottom(BorderStyle.THIN);
+			optionStyle.setBorderRight(BorderStyle.THIN);
+			optionStyle.setAlignment(HorizontalAlignment.CENTER);
+			Font optionFont = optionsSheet.getWorkbook().createFont();
+			optionFont.setFontName("宋体");
+			optionStyle.setFont(optionFont);
+		}
+		public void setModuleName(String moduleName) {
+			this.moduleName = moduleName;
+		}
+		public Cell appendOptions(ModuleImportTemplateField field, ImportTemplateOptionsHandler optionHandler) {
+			if(field.getFieldId() != null) {
+				DictionaryField dictField = dictService.getField(moduleName, field.getFieldId());
+				//普通枚举字段
+				if(dictField != null && dictField.getOptionGroupId() != null && dictField.getOptionGroupId() > 0) {
+					if(!enumFieldCellMap.containsKey(dictField.getOptionGroupId())) {
+						List<DictionaryOption> options = dictService.getAllOptions().stream().filter((opt)->opt.getGroupId().equals(dictField.getOptionGroupId())).collect(Collectors.toList());
+						Cell cell = appendCells(dictField.getFullKey(), CollectionUtils.toList(options, DictionaryOption::getTitle));
+						enumFieldCellMap.put(dictField.getOptionGroupId(), cell);
+					}
+					return enumFieldCellMap.get(dictField.getOptionGroupId());
+				}
+			}else if(field.getCompositeId() != null){
+				//关系名称字段
+				DictionaryComposite composite = dictService.getComposite(moduleName, field.getCompositeId());
+				if(!compositeLabelCellMap.containsKey(composite.getId())) {
+					Set<String> labels = composite.getRelationSubdomain();
+					Cell cell = appendCells(composite.getTitle() + "." + EntityConstants.LABEL_KEY, labels);
+					compositeLabelCellMap.put(composite.getId(), cell);
+				}
+				return compositeLabelCellMap.get(composite.getId());
+			}
+			return null;
+		}
+		static final int MAX_CELL_INDEX_PER_ROW = 21;
+		private Cell appendCells(String fullKey, Collection<String> options) {
+			Row row = this.optionsSheet.createRow(nextOptionsRowNum++);
+			Cell titleCell = row.createCell(0);
+			titleCell.setCellValue(fullKey);
+			titleCell.setCellStyle(this.titleStyle);
+			this.optionsSheet.autoSizeColumn(0);
+			int cellIndex = 0;
+			Iterator<String> itr = options.iterator();
+			while(itr.hasNext()) {
+				cellIndex++;
+				if(cellIndex <= MAX_CELL_INDEX_PER_ROW) {
+					Cell cell = row.createCell(cellIndex);
+					cell.setCellValue(itr.next());
+					cell.setCellStyle(this.optionStyle);
+				}else {
+					cellIndex = 0;
+					row = this.optionsSheet.createRow(nextOptionsRowNum++);
+				}
+			}
+			if(titleCell.getRowIndex() < nextOptionsRowNum - 1) {
+				CellRangeAddress region = new CellRangeAddress(titleCell.getRowIndex(), nextOptionsRowNum - 1, 0, 0);
+				this.optionsSheet.addMergedRegion(region);
+			}
+			nextOptionsRowNum++;
+			return titleCell;
+		}
+	}
 }

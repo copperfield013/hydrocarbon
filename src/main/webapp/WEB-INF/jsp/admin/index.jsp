@@ -45,9 +45,14 @@
 						             						<ul>
 						             							<c:forEach items="${l1Menu.level2s }" var="l2Menu">
 						             								<c:if test="${l2disables[l2Menu.id] != true }">
-							             								<li>
-									             							<div><a class="open-link" href="admin/menu/${l2Menu.id }">${l2Menu.title }</a></div>
-									             						</li>
+						             									<c:choose>
+						             										<c:when test="${l2Menu.customPageId != null}">
+										             							<li class="custom-page-menu-item"><div><a href="#">${l2Menu.title }</a></div></li>
+						             										</c:when>
+						             										<c:otherwise>
+										             							<li><div><a class="open-link" href="admin/menu/${l2Menu.id }">${l2Menu.title }</a></div></li>
+						             										</c:otherwise>
+						             									</c:choose>
 						             								</c:if>
 						             							</c:forEach>
 						             						</ul>
