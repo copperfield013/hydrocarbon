@@ -1,6 +1,5 @@
 package cn.sowell.datacenter.model.config.service.impl;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.sowell.copframe.dao.utils.NormalOperateDao;
 import cn.sowell.copframe.utils.CollectionUtils;
+import cn.sowell.copframe.utils.FormatUtils;
 import cn.sowell.datacenter.entityResolver.FusionContextConfig;
 import cn.sowell.datacenter.entityResolver.FusionContextConfigFactory;
 import cn.sowell.datacenter.entityResolver.config.ModuleConfigureMediator;
@@ -56,11 +56,11 @@ public class ConfigureServiceImpl implements ConfigureService{
 	@Override
 	public List<Module> getSiblingModules(String moduleName) {
 		Module sourceModule = fFactory.getModule(moduleName);
-		ABCNode node = MappingContainer.getABCNode(BigInteger.valueOf(sourceModule.getMappingId()));
+		ABCNode node = MappingContainer.getABCNode(FormatUtils.toInteger(sourceModule.getMappingId()));
 		String abcattr = node.getAbcattr();
 		return getEnabledModules().stream().filter(module->{
 			if(module.getMappingId() != null) {
-				ABCNode abcNode = MappingContainer.getABCNode(BigInteger.valueOf(module.getMappingId()));
+				ABCNode abcNode = MappingContainer.getABCNode(FormatUtils.toInteger(module.getMappingId()));
 				return abcattr.equals(abcNode.getAbcattr());
 			}
 			return false;

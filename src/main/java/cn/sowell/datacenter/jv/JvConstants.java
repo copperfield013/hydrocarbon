@@ -11,4 +11,6 @@ public interface JvConstants {
 	final String JSP_MAIN = JSP_BASE + "/main";
 
 	final String JSP_ENTITY = JSP_BASE + "/entity";
+
+	final String JSP_CUSTOM_PAGE = JSP_BASE + "/custompage";
 }

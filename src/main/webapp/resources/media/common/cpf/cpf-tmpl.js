@@ -17,7 +17,7 @@ define(function(require, exports, module){
 		/**
 		 * 
 		 */
-		this.tmpl = function(obj, events){
+		this.tmpl = function(obj, events, resultData){
 			var _this = this;
 			if(typeof $.fn.tmpl === 'function'){
 				var $result = param.$script.tmpl(obj);
@@ -29,7 +29,10 @@ define(function(require, exports, module){
 						var data = eval('with(obj){r=' + dataStr + '}');
 						$(this).data('plh-data', data);
 					});
-				require('event').bindScopeEvent($result, events, obj, false);
+				var bindResult = require('event').bindScopeEvent($result, events, obj, false);
+				if(resultData){
+					resultData.bindResult = bindResult;
+				}
 				return $result;
 			}
 		};
@@ -74,15 +77,19 @@ define(function(require, exports, module){
 					var $this = $(this);
 					var _data = getData(this);
 					var $result = null;
+					var tmplResultData = {};
 					if(rebuild){
-						$result = _this.tmpl(_data, events);
+						$result = _this.tmpl(_data, events, tmplResultData);
 					}else if(!$clone){
-						$result = _this.tmpl(_data, events);
+						$result = _this.tmpl(_data, events, tmplResultData);
 						$clone = $result.clone(true);
 					}else{
 						$result = $clone.clone(true);
 					}
 					$this.after($result).data('plh-dom', $result);
+					if(tmplResultData.bindResult && tmplResultData.bindResult.afterRenderCallbacks){
+						tmplResultData.bindResult.afterRenderCallbacks.fire();
+					}
 					$results = $results.add($result);
 					callback.apply(_this, [$result, _data, i == $plhs.length - 1, i]);
 				});

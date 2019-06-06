@@ -29,6 +29,7 @@ import cn.sowell.datacenter.model.config.pojo.criteria.AuthorityCriteria;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
 import cn.sowell.datacenter.model.config.service.ConfigAuthencationService;
 import cn.sowell.datacenter.model.config.service.ConfigUserService;
+import cn.sowell.datacenter.model.config.service.ConfigureService;
 import cn.sowell.datacenter.model.config.service.NonAuthorityException;
 import cn.sowell.datacenter.model.config.service.SideMenuService;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateDetailFieldGroup;
@@ -59,6 +60,9 @@ public class AuthorityServiceImpl implements AuthorityService{
 	@Resource
 	ConfigUserService userService;
 	
+	@Resource
+	ConfigureService configService;
+	
 	@Override
 	public SideMenuLevel2Menu validateL2MenuAccessable(Long level2MenuId) throws NonAuthorityException{
 		return this.validateUserL2MenuAccessable((UserDetails) UserUtils.getCurrentUser(), level2MenuId);
@@ -77,7 +81,9 @@ public class AuthorityServiceImpl implements AuthorityService{
 		
 		if(block != null) {
 			Set<String> userAuthorities = CollectionUtils.toSet(user.getAuthorities(), GrantedAuthority::getAuthority);
-			
+			if(isAdminUser(userAuthorities, null)) {
+				return block;
+			}
 			//只有当用户至少包含菜单的其中一个权限时，才能验证成功
 			if(!userAuthorities.stream()
 					.filter(auth->block.getAuthoritySet().contains(auth))
@@ -90,6 +96,13 @@ public class AuthorityServiceImpl implements AuthorityService{
 		}
 	}
 	
+	private boolean isAdminUser(Set<String> userAuthorities, String configAuthen) {
+		if(configAuthen == null) {
+			configAuthen = configAuthService.getAdminConfigAuthen();
+		}
+		return userAuthorities.contains(configAuthen);
+	}
+
 	@Override
 	public SideMenuLevel2Menu validateUserL2MenuAccessable(UserDetails user, Long level2MenuId) throws NonAuthorityException{
 		Assert.notNull(level2MenuId, "二级菜单的id不能为空");
@@ -97,6 +110,9 @@ public class AuthorityServiceImpl implements AuthorityService{
 		SideMenuLevel2Menu l2 = menuService.getLevel2Menu(level2MenuId);
 		if(l2 != null) {
 			Set<String> userAuthorities = CollectionUtils.toSet(user.getAuthorities(), GrantedAuthority::getAuthority);
+			if(isAdminUser(userAuthorities, null)) {
+				return l2;
+			}
 			if(!l2.getAuthoritySet().isEmpty()) {
 				//只有当用户至少包含菜单的其中一个权限时，才能验证成功
 				if(!userAuthorities.stream()
@@ -131,7 +147,9 @@ public class AuthorityServiceImpl implements AuthorityService{
 		SideMenuLevel1Menu l1 = menuService.getLevel1Menu(level1MenuId);
 		if(l1 != null) {
 			Set<String> userAuthorities = CollectionUtils.toSet(user.getAuthorities(), GrantedAuthority::getAuthority);
-			
+			if(isAdminUser(userAuthorities, null)) {
+				return l1;
+			}
 			//只有当用户至少包含菜单的其中一个权限时，才能验证成功
 			if(!userAuthorities.stream()
 					.filter(auth->l1.getAuthoritySet().contains(auth))

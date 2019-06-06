@@ -71,3 +71,17 @@
 <link href="media/admin/plugins/select2/css/select2-bootstrap.css" rel="stylesheet" />
 <!-- <script src="media/admin/plugins/select2/js/select2.full.js"></script>
 <script src="media/admin/plugins/select2/js/i18n/zh-CN.js"></script> -->
+
+<script src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<!-- <script src="https://www.echartsjs.com/asset/theme/dark.js"></script> -->
+<script src="https://api.map.baidu.com/api?v=2.0&ak=lHd5yz8EX3OCya00XbMGZfs53xfznbKG"></script>
+
+
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+

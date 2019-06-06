@@ -48,12 +48,21 @@
 				</a>
 				<ul class="submenu">
 					{{each(j, level2) l1.l2Menus}}
-						<li>
-							<a class="tab" href="jv/entity/curd/list/${level2.id }" 
-								target="entity_list_${level2.id }" title="${level2.title }">
-								<span class="menu-text">${level2.title }</span>
-							</a>
-						</li>
+						{{if level2.customPagePath}}
+							<li>
+								<a class="tab" href="jv/custompage/path/${level2.customPagePath}" 
+									target="custom_page_${level2.customPageId }" title="${level2.title }">
+									<span class="menu-text">${level2.title }</span>
+								</a>
+							</li>
+						{{else}}
+							<li>
+								<a class="tab" href="jv/entity/curd/list/${level2.id }" 
+									target="entity_list_${level2.id }" title="${level2.title }">
+									<span class="menu-text">${level2.title }</span>
+								</a>
+							</li>
+						{{/if}}
 					{{/each}}
 				</ul>
 			</li>

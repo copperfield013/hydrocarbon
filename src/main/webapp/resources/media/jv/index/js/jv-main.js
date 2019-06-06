@@ -21,7 +21,7 @@ define(function(require, exports){
 	 */
 	var defer = $.Deferred();
 	var $CPF = require('$CPF');
-	require('ajax');
+	var Ajax = require('ajax');
 	var Page = require('page');
 	require('form');
 	require('paging');
@@ -69,6 +69,9 @@ define(function(require, exports){
     		$accountArea.removeClass('open');
     	});
     });
+    Ajax.loadResource('media/jv/custompage/json/halloween.json').done(function(halloween){
+		echarts.registerTheme('halloween', halloween);
+	});
     defer.resolve(require);
     exports.deferred = defer.promise();
     /*try{

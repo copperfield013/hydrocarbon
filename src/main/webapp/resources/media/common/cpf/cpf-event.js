@@ -4,9 +4,11 @@ define(function(require, exports, module){
 		'on-change'		: 'change',
 		'on-input'		: 'input',
 		'on-dblclick'	: 'dblclick',
-		'on-render'		: null
+		'on-render'		: null,
+		'after-render'	: null
 	};
 	exports.bindScopeEvent = function($scope, events, doWithObj, retainAttr){
+		var afterRenderCallbacks = $.Callbacks();
 		for(var eventName in EVENT_MAP){
 			$scope
 				.filter('[' + eventName + ']')
@@ -36,6 +38,14 @@ define(function(require, exports, module){
 								callbackParam? 
 									events[callbackName].apply(this, args.concat($.merge([], arguments).slice(1)))
 									: events[callbackName].apply(this)
+							}else if(eventName === 'after-render'){
+								var that = this;
+								var thisArgs = arguments;
+								afterRenderCallbacks.add(function(){
+									callbackParam? 
+											events[callbackName].apply(that, args.concat($.merge([], thisArgs).slice(1)))
+											: events[callbackName].apply(that)
+								});
 							}else{
 								$this.on(EVENT_MAP[eventName], callbackParam? function(e){
 									e.preventDefault();
@@ -49,5 +59,8 @@ define(function(require, exports, module){
 					}
 				});
 		}
+		return {
+			afterRenderCallbacks
+		};
 	}
 });

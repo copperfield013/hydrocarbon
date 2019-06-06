@@ -1,6 +1,7 @@
 package cn.sowell.datacenter.admin.controller.main;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +91,15 @@ public class  AdminMainController {
 		List<SideMenuBlock> blocks = null;
 		if(!Integer.valueOf(1).equals(sysConfig.getOnlyShowDefaultBlock())) {
 			blocks = menuService.getAllBlocks();
+			Iterator<SideMenuBlock> itr = blocks.iterator();
+			while(itr.hasNext()) {
+				SideMenuBlock thisBlock = itr.next();
+				try {
+					authService.validateUserBlockAccessable((UserDetails) user, thisBlock.getId());
+				} catch (NonAuthorityException e) {
+					itr.remove();
+				}
+			}
 		}
 		model.addAttribute("sysConfig", sysConfig);
 		model.addAttribute("blocks", blocks);

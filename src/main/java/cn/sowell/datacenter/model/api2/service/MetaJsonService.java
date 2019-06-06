@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.sowell.datacenter.model.config.pojo.MenuBlock;
