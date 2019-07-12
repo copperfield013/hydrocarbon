@@ -13,6 +13,11 @@
 		   			<span class="menu-text">功能列表管理</span>
 		   		</a>
 			</li>
+			<li>
+				<a class="tab" href="admin/config/ks/list" target="ksconfig" title="轻服务管理">
+		   			<span class="menu-text">轻服务管理</span>
+		   		</a>
+			</li>
 		</ul>
 	</li>
 </sec:authorize>

@@ -132,10 +132,14 @@ public interface AdminConstants {
 	final String JSP_CONFIG_MENU = JSP_CONFIG + "/menu";
 	
 	final String JSP_CONFIG_USER = JSP_CONFIG + "/user";
+	
+	final String JSP_CONFIG_KS = JSP_CONFIG + "/ks";
 
 	final String KEY_FUSE_MODE = "%fuseMode%";
 
 	final String KEY_ACTION_ID = "%actionId%";
+
+	
 
 	
 

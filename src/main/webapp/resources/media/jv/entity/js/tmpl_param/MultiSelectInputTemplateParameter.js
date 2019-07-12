@@ -22,7 +22,7 @@ define(function(require, exports, module){
 		}
 		
 		this.valueGetter = function($dom){
-			return getSelect($dom).val();
+			return getSelect($dom).val() || '';
 		}
 		
 		this.valueSetter = function($dom, val, initValueFlag){

@@ -81,6 +81,11 @@ define(function(require, exports, module){
 		Ajax.ajax('api2/meta/menu/get_blocks', Utils.setProperties(param, ['blockId', 'menuId']), function(data){
 			if(data.status === 'suc'){
 				context.setStatus(data, ['sysConfig', 'currentBlockId', 'blocks']);
+				if(param.menuId){
+					var $link = $('#sidebar a[l2-menu-id="' + param.menuId +  '"]');
+					$link.closest('[l1-menu-id]').find('.menu-dropdown').trigger('click');
+					$link.trigger('click');
+				}
 			}
 		});
 		

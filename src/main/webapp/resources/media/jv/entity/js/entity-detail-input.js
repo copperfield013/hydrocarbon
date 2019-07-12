@@ -252,6 +252,7 @@ define(function(require, exports, module){
 					});
 					break;
 				case 'label':
+				case 'multiselect':
 					prepare(require('entity/js/tmpl_param/MultiSelectInputTemplateParameter'), {
 						optionsKey			: this.param.fieldId,
 						options				: this.param.options,

@@ -19,6 +19,8 @@ public interface Api2Constants {
 	final String KEY_FUSE_MODE = "%fuseMode%";
 
 	final String KEY_ACTION_ID = "%actionId%";
+
 	
+	final String URI_KS = URI_BASE + "/ks";
 	
 }

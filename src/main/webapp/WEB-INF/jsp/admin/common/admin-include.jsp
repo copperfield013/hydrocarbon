@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
 
-<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_546680_6wbnc5pe47r.css">
+<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_546680_8578e8gyp3a.css">
 
 <!--Basic Styles-->
 <!-- <link href="media/admin/plugins/typeahead/dist/examples.css" rel="stylesheet" /> -->
@@ -76,3 +76,8 @@
 <link href="media/admin/plugins/select2/css/select2-bootstrap.css" rel="stylesheet" />
 <!-- <script src="media/admin/plugins/select2/js/select2.full.js"></script>
 <script src="media/admin/plugins/select2/js/i18n/zh-CN.js"></script> -->
+
+<script src="media/admin/plugins/ace/ace.js"></script>
+<script type="text/javascript" src="media/admin/plugins/ace/ext-language_tools.js"></script>
+
+

@@ -39,7 +39,7 @@
 	<!-- 默认访问权限的获取service -->
 	<bean id="confAuthenService" class="cn.sowell.datacenter.model.config.service.impl.ConfigAuthencationServiceImpl" />
 
-	<context:component-scan base-package="cn.sowell.dataserver.model.tmpl.manager.impl" />
+	<context:component-scan base-package="cn.sowell.dataserver.model.*.manager.impl" />
 	
 	<context:component-scan base-package="cn.sowell.dataserver.model.tmpl.duplicator.impl" />
 
@@ -84,20 +84,7 @@
 	
 	<bean class="cn.sowell.dataserver.model.dict.validator.ModuleCachableMetaSupportorImpl" />
 
-	<bean class="cn.sowell.datacenter.common.jstl.CriteriaInputRendererFactory" >
-		<property name="renderers">
-			<list>
-				<bean class="cn.sowell.datacenter.common.jstl.render.TextInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.SelectInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.DateInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.LabelInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.RelationExistionInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.DateRangeInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.RangeInputRenderer" />
-				<bean class="cn.sowell.datacenter.common.jstl.render.NumberInputRenderer" />
-			</list>
-		</property>
-	</bean>
+	
 
 	<task:annotation-driven /> <!-- 定时器开关 -->
 	<bean class="cn.sowell.datacenter.model.modules.bean.PeopleExportHandlerTask" />

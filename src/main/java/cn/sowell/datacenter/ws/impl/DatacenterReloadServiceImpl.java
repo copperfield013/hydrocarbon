@@ -11,6 +11,7 @@ import cn.sowell.datacenter.entityResolver.config.DBFusionConfigContextFactory;
 import cn.sowell.datacenter.entityResolver.config.ModuleConfigureMediator;
 import cn.sowell.datacenter.model.config.service.SideMenuService;
 import cn.sowell.datacenter.ws.DatacenterReloadService;
+import cn.sowell.dataserver.model.karuiserv.service.KaruiServService;
 import cn.sowell.dataserver.model.tmpl.service.CachableTemplateService;
 
 @WebService(endpointInterface="cn.sowell.datacenter.ws.DatacenterReloadService")
@@ -30,6 +31,9 @@ public class DatacenterReloadServiceImpl implements DatacenterReloadService, Ini
 	@Resource
 	CachableTemplateService tService;
 	
+	@Resource
+	KaruiServService ksService;
+	
 	Logger logger = Logger.getLogger(DatacenterReloadServiceImpl.class);
 	
 	/**
@@ -38,6 +42,7 @@ public class DatacenterReloadServiceImpl implements DatacenterReloadService, Ini
 	@Override
 	public String syncModule() {
 		logger.info("接口通知模块数据刷新");
+		ksService.reloadCache();
 		menuService.reloadMenuMap();
 		fService.refreshFields();
 		moduleMediator.refresh();

@@ -753,6 +753,7 @@ define(function(require, exports){
 				var f = function(){};
 				f.prototype = superClass.prototype;
 				subClass.prototype = new f();
+				subClass.__superPrototype = f.prototype;
 				subClass.prototype.constructor = subClass;
 			}
 		},
@@ -1074,6 +1075,7 @@ define(function(require, exports){
 		this.properties = $.extend({}, _properties);
 		this.callbacksMap = {}
 		this.selfishCallbacksMap = {};
+		this.domMap = {};
 	}
 	Context.prototype.getStatus = function(propertyName, defValue){
 		if(this.properties.hasOwnProperty(propertyName)){
@@ -1103,6 +1105,7 @@ define(function(require, exports){
 				return this;
 			}
 			this.properties[propertyName] = propertyValue;
+			console.debug('status Changed[' + propertyName + ']', propertyValue);
 			this.trigger(propertyName, [{
 				before, after: propertyValue
 			}]);
@@ -1166,6 +1169,29 @@ define(function(require, exports){
 			this.selfishCallbacksMap[propertyName].callbacks.add(callback);
 		}else{
 			callback.apply(this, [value]);
+		}
+	}
+	
+	Context.prototype.setDom = function(propertyName, dom){
+		exports.assert(typeof propertyName == 'string' && !!propertyName, '第一个参数必须是不为空的字符串');
+		this.domMap[propertyName] = dom;
+	}
+	
+	Context.prototype.getDom = function(propertyName){
+		exports.assert(typeof propertyName == 'string' && !!propertyName, '第一个参数必须是不为空的字符串');
+		return this.domMap[propertyName];
+	}
+	
+	Context.prototype.loadTmplMap = function(tmplMapURI, tmplMapStatusName){
+		var _this = this;
+		return require('tmpl').load(tmplMapURI).done(function(tmplMap){
+			_this._tmplMapStatusName = tmplMapStatusName || 'tmplMap';
+			_this.setStatus(_this._tmplMapStatusName, tmplMap);
+		});
+	}
+	Context.prototype.getTmplMap = function(){
+		if(this._tmplMapStatusName){
+			return this.getStatus(this._tmplMapStatusName);
 		}
 	}
 	

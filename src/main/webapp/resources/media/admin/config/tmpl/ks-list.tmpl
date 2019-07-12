@@ -1,0 +1,25 @@
+<script id="ks-list">
+	{{each(i, ks) ksList}}
+		<tr data-id="${ks.id}" data-title="${ks.title}" class="${ks.disabled == 1? 'ks-disabled': ''}">
+			<td>
+				<label>
+					<input type="checkbox" class="colored-blue row-selectable-checkbox">
+					<span class="text"></span>
+				</label>
+			</td>
+			<td>${i + 1}</td>
+			<td>${ks.title}</td>
+			<td>${ks.path}</td>
+			<td>${KS_TYPE_MAP[ks.type]}</td>
+			<td>${ks.description}</td>
+			<td>
+				<a target="ks_update_${ks.id}" 
+					title="(${ks.title})轻服务修改" 
+					href="admin/config/ks/edit/${ks.id}" 
+					class="tab btn btn-info btn-xs edit">
+					<i class="fa fa-edit"></i>修改
+				</a>
+			</td>
+		</tr>
+	{{/each}}
+</script>

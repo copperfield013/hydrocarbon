@@ -269,6 +269,34 @@ define(function(require, exports, module){
 		});
 	});
 	
+	/**
+	 * 切换显示表单的错误信息，要求$formControl必须是.form-group下的.form-control才能看到效果
+	 * 如果要移除错误信息，那么传入第二个参数为空，如果errorKey为空，将移除所有的错误信息
+	 */
+	exports.toggleError = function($formControl, errorMsg, errorKey){
+		$formControl = $($formControl);
+		var $formGroup = $($formControl).closest('.form-group');
+		if($formGroup.length > 0){
+			if(errorKey){
+				$formControl.nextAll('small.help-block[error-key="' + errorKey + '"]').remove();
+			}else{
+				$formControl.nextAll().remove();
+			}
+			if(errorMsg){
+				$formGroup.addClass('has-error');
+				$formControl.after('<small class="help-block" error-key="' + (errorKey || '') + '">' + errorMsg + '</small>');
+			}else{
+				$formGroup.removeClass('has-error');
+			}
+		}
+	}
+	exports.clearAllError = function($container){
+		$container
+			.find('.has-error').removeClass('has-error')
+			.end()
+			.find('small.help-block').remove();
+	}
+	
 	exports.formatFormData = formatFormData;
 	exports.initFormElement = initFormElement;
 	exports.initFormInput = initFormInput;

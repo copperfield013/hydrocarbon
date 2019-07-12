@@ -12,7 +12,20 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security.xsd">
 
-	
+	<bean class="cn.sowell.datacenter.common.jstl.CriteriaInputRendererFactory" >
+		<property name="renderers">
+			<list>
+				<bean class="cn.sowell.datacenter.common.jstl.render.TextInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.SelectInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.DateInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.LabelInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.RelationExistionInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.DateRangeInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.RangeInputRenderer" />
+				<bean class="cn.sowell.datacenter.common.jstl.render.NumberInputRenderer" />
+			</list>
+		</property>
+	</bean>
 	
 	<!-- controller自动扫描(自动注入) -->
 	<context:component-scan base-package="cn.sowell.datacenter.*.controller.*" />

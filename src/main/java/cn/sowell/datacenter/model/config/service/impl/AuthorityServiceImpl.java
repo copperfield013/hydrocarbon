@@ -32,6 +32,7 @@ import cn.sowell.datacenter.model.config.service.ConfigUserService;
 import cn.sowell.datacenter.model.config.service.ConfigureService;
 import cn.sowell.datacenter.model.config.service.NonAuthorityException;
 import cn.sowell.datacenter.model.config.service.SideMenuService;
+import cn.sowell.dataserver.model.karuiserv.pojo.KaruiServ;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateDetailFieldGroup;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateDetailTemplate;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroup;
@@ -262,6 +263,29 @@ public class AuthorityServiceImpl implements AuthorityService{
 			}
 		}
 		throw new NonAuthorityException("当前用户没有管理员权限，拒绝访问");
+	}
+
+	@Override
+	public void validateKsAccess(KaruiServ ks, ApiUser user) {
+		Assert.notNull(ks, "传入的ks参数不能为空");
+		Assert.notNull(user, "传入的user参数不能为空");
+		Collection<? extends GrantedAuthority> auths = user.getAuthorities();
+		if(auths != null && !auths.isEmpty()) {
+			String authority = ks.getAuthority();
+			if(authority != null) {
+				Set<String> ksAuths = TextUtils.split(authority, ";");
+				boolean matched = auths.stream()
+					.anyMatch(auth->ksAuths.contains(auth.getAuthority()));
+				if(!matched) {
+					throw new NonAuthorityException("Current user has not any authority matched the authroties of Karui Service.");
+				}
+			}else {
+				throw new NonAuthorityException("Karui Service has not configured any authorities");
+			}
+		}else {
+			throw new NonAuthorityException("Current user has not any authorities");
+		}
+		
 	}
 
 

@@ -449,7 +449,7 @@ public class Api2EntityCurdController {
         }
 		
 		if(entity == null) {
-			jRes.setStatus("error");
+			jRes.setStatus("notFoundEntity");
 			jRes.put("message", "没有找到实体");
 		}else {
 			//用模板组合解析，并返回可以解析为json的对象

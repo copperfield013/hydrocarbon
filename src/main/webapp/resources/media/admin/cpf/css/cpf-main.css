@@ -1177,3 +1177,32 @@ label.tooltip-label .badge {
 plh{
 	display: none !important;
 }
+
+.ks-list .table tbody > tr.ks-disabled {
+    background-color: #999;
+    color: #ddd;
+}
+
+.widget.expanded {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.widget.expanded>.widget-body {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 36px;
+}
+.fixed-full{
+	position: fixed;
+    left: 0;
+    right: 0;
+    top: 36px;
+    bottom: 0;
+}

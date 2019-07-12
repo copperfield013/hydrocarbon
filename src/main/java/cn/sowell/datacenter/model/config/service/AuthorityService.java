@@ -13,6 +13,7 @@ import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.pojo.criteria.AuthorityCriteria;
+import cn.sowell.dataserver.model.karuiserv.pojo.KaruiServ;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateDetailFieldGroup;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroup;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroupAction;
@@ -41,6 +42,8 @@ public interface AuthorityService {
 	void validateUserAccessable(UserDetails user, String validateSign);
 
 	void validateAdminAuth(UserDetails user);
+
+	void validateKsAccess(KaruiServ ks, ApiUser user);
 
 	
 

@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.sowell.datacenter.model.api2.service.MetaJsonService;
@@ -17,6 +19,7 @@ import cn.sowell.datacenter.model.config.pojo.SideMenuBlock;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel1Menu;
 import cn.sowell.datacenter.model.config.pojo.SideMenuLevel2Menu;
 import cn.sowell.datacenter.model.config.service.AuthorityService;
+import cn.sowell.dataserver.model.karuiserv.pojo.KaruiServ;
 import cn.sowell.dataserver.model.modules.pojo.ModuleMeta;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroup;
 
@@ -115,6 +118,11 @@ public class MetaJsonServiceImpl implements MetaJsonService{
 			} catch (Exception e) {}
 		}
 		return jBlocks;
+	}
+
+	@Override
+	public JSONArray convertKaruiServJson(List<KaruiServ> ksList) {
+		return (JSONArray) JSON.toJSON(ksList);
 	}
 
 	

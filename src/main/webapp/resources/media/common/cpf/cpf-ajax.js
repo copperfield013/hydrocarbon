@@ -210,7 +210,7 @@ define(function(require, exports, module){
 		    processData: false,
 		    contentType: false,
 		    beforeSend	: function(){
-		    	console.log(arguments);
+		    	//console.log(arguments);
 		    },
 		    headers		: headers,
 		    success		: function(data, status, jqXHR){
@@ -223,6 +223,7 @@ define(function(require, exports, module){
 		    			if(typeof json === 'string'){
 		    				json = $.parseJSON(json)
 		    			}
+		    			parseFastjsonRef(json, json);
 		    			if(json && json['ajax_page_response'] === 'cpf'){
 		    				var jRes = new AjaxPageResponse(json);
 		    				var result = param.whenSuc(jRes, 'json');
@@ -239,7 +240,7 @@ define(function(require, exports, module){
 		    		//返回的数据是html
 		    		param.whenSuc(data, 'html');
 		    	}else{
-		    		console.log(resContentType);
+		    		//console.log(resContentType);
 		    		param.whenSuc(data, jqXHR);
 		    	}
 		    },
@@ -265,6 +266,22 @@ define(function(require, exports, module){
 		});
 	}
 	
+	var REF_KEY = '$ref';
+	/**
+	 * FastJson在处理循环依赖引用的时候，只会生成第一次出现的对象，后面再次出现相同引用的对象，
+	 * 会以特殊的字符串指向根对象的对应路径
+	 */
+	function parseFastjsonRef(jsonObj, $){
+		if(jsonObj && typeof jsonObj === 'object'){
+			for(var k in jsonObj){
+				if(jsonObj[k] && typeof jsonObj[k][REF_KEY] === 'string' && jsonObj[k][REF_KEY].startsWith('$.')){
+					jsonObj[k] = eval(jsonObj[k][REF_KEY]);
+				}
+				parseFastjsonRef(jsonObj[k], $);
+			}
+		}
+	}
+	
 	/**
 	 * 以post的方式将obj转换成json字符串，并发送到后台
 	 * 后台的控制器需要支持application/json;charset=utf-8的头信息
@@ -277,7 +294,7 @@ define(function(require, exports, module){
 		require('console')
 			.debug('发送json请求到' + url)
 			.debug(json);
-		$.ajax({
+		return $.ajax({
 			//提交的地址
 			url		: url,
 			method	: 'POST',
@@ -294,6 +311,7 @@ define(function(require, exports, module){
 					json = $.parseJSON(json);
 				}catch(e){}
 			}
+			parseFastjsonRef(json, json);
 			done.apply(this, [json, 'done', arguments]);
 		}).fail(function(jqXHR, textStatus, errorThrown){
 			done.apply(this, [null, 'fail', arguments]);
