@@ -180,7 +180,7 @@ public class AdminTemplateGroupController {
 
 	@RequestMapping("/rabc_relate/{moduleName}/{relationCompositeId}")
 	public String rabcRelate(@PathVariable String moduleName, 
-			@PathVariable Long relationCompositeId,
+			@PathVariable Integer relationCompositeId,
 			Long rabcTemplateGroupId,
 			Model model) {
 		ModuleMeta relationCompositeModule = mService.getCompositeRelatedModule(moduleName, relationCompositeId);

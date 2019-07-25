@@ -338,8 +338,8 @@ public class AdminModulesImportController {
 				JSONObject fieldItem = (JSONObject) item; 
 				ModuleImportTemplateField field = new ModuleImportTemplateField();
 				field.setId(fieldItem.getLong("id"));
-				field.setFieldId(fieldItem.getLong("fieldId"));
-				field.setCompositeId(fieldItem.getLong("compositeId"));
+				field.setFieldId(fieldItem.getInteger("fieldId"));
+				field.setCompositeId(fieldItem.getInteger("compositeId"));
 				field.setFieldIndex(fieldItem.getInteger("fieldIndex"));
 				return field;
 			});

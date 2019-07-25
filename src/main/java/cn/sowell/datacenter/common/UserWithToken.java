@@ -5,8 +5,7 @@ import java.util.Map;
 
 import org.springframework.util.Assert;
 
-import com.abc.auth.pojo.UserInfo;
-
+import cho.carbon.auth.pojo.UserInfo;
 import cn.sowell.datacenter.model.admin.pojo.ABCUser;
 
 public class UserWithToken extends ABCUser implements ApiUser{

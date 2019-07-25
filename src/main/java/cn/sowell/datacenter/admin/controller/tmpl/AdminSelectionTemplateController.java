@@ -52,7 +52,7 @@ public class AdminSelectionTemplateController {
 	
 	
 	@RequestMapping("/create")
-	public String createSelectionTemplate(String moduleName, Long compositeId, Model model) {
+	public String createSelectionTemplate(String moduleName, Integer compositeId, Model model) {
 		ModuleMeta module = mService.getModule(moduleName);
 		Assert.notNull(module, "module[" + moduleName + "]不存在");
 		DictionaryComposite composite = dService.getComposite(moduleName, compositeId);
@@ -150,11 +150,11 @@ public class AdminSelectionTemplateController {
 			tmpl.setId(json.getLong("tmplId"));
 			tmpl.setTitle(json.getString("title"));
 			tmpl.setDefaultPageSize(json.getInteger("defPageSize"));
-			tmpl.setDefaultOrderFieldId(json.getLong("defOrderFieldId"));
+			tmpl.setDefaultOrderFieldId(json.getInteger("defOrderFieldId"));
 			tmpl.setDefaultOrderDirection(json.getString("defOrderDir"));
 			tmpl.setCreateUserCode((String) UserUtils.getCurrentUser().getId());
 			tmpl.setModule(json.getString("module"));
-			tmpl.setCompositeId(json.getLong("compositeId"));
+			tmpl.setCompositeId(json.getInteger("compositeId"));
 			tmpl.setMultiple(Boolean.TRUE.equals(json.getBoolean("multiple"))? 1: null);
 			tmpl.setNonunique(Boolean.TRUE.equals(json.getBoolean("nonunique"))? 1: null);
 			JSONArray columnData = json.getJSONArray("columnData");
@@ -169,7 +169,7 @@ public class AdminSelectionTemplateController {
 					if(src.getString("specField") != null){
 						column.setSpecialField(src.getString("specField"));
 					}else{
-						column.setFieldId(src.getLong("fieldId"));
+						column.setFieldId(src.getInteger("fieldId"));
 					}
 					column.setOrder(i++);
 					columns.add(column);
@@ -189,7 +189,7 @@ public class AdminSelectionTemplateController {
 					criteria.setTitle(item.getString("title"));
 					criteria.setOrder(order++);
 					if(item.getBooleanValue("fieldAvailable")) {
-						criteria.setFieldId(item.getLong("fieldId"));
+						criteria.setFieldId(item.getInteger("fieldId"));
 						criteria.setRelationLabel(item.getString("relationLabel"));
 						//条件需要显示
 						criteria.setComparator(item.getString("comparator"));

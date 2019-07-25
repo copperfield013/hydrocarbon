@@ -8,11 +8,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.abc.mapping.conf.MappingContainer;
-import com.abc.mapping.node.ABCNode;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import cho.carbon.meta.struc.er.Struc;
+import cho.carbon.meta.struc.er.StrucContainer;
 import cn.sowell.copframe.dao.utils.NormalOperateDao;
 import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.copframe.utils.FormatUtils;
@@ -56,12 +56,13 @@ public class ConfigureServiceImpl implements ConfigureService{
 	@Override
 	public List<Module> getSiblingModules(String moduleName) {
 		Module sourceModule = fFactory.getModule(moduleName);
-		ABCNode node = MappingContainer.getABCNode(FormatUtils.toInteger(sourceModule.getMappingId()));
-		String abcattr = node.getAbcattr();
+		
+		Struc node = StrucContainer.findStruc(FormatUtils.toInteger(sourceModule.getMappingId()));
+		String abcattr = node.getItemCode();
 		return getEnabledModules().stream().filter(module->{
 			if(module.getMappingId() != null) {
-				ABCNode abcNode = MappingContainer.getABCNode(FormatUtils.toInteger(module.getMappingId()));
-				return abcattr.equals(abcNode.getAbcattr());
+				Struc abcNode = StrucContainer.findStruc(FormatUtils.toInteger(module.getMappingId()));
+				return abcattr.equals(abcNode.getItemCode());
 			}
 			return false;
 		}).collect(Collectors.toList());

@@ -1,15 +1,15 @@
 package cn.sowell.datacenter.model.modules.bean;
 
 public class EntityImportDictionaryField {
-	private Long id;
+	private Integer id;
 	private String name;
 	private String pattern;
 	private String type;
 	private Integer casLevel;
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {

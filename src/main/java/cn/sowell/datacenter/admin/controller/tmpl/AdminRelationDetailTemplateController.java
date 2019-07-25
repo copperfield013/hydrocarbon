@@ -21,7 +21,7 @@ public class AdminRelationDetailTemplateController {
 	ModulesService mService;
 	
 	@RequestMapping("/create")
-	public String create(String moduleName, Long compositeId, Model model) {
+	public String create(String moduleName, Integer compositeId, Model model) {
 		ModuleMeta module = mService.getModule(moduleName);
 		ModuleMeta compoisteRelateModule = mService.getCompositeRelatedModule(moduleName, compositeId);
 		model.addAttribute("relationModule", compoisteRelateModule);

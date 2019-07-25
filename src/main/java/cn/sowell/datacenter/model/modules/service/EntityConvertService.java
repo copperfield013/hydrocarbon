@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.abc.dto.ErrorInfomation;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -19,7 +18,7 @@ public interface EntityConvertService {
 
 	JSONArray toHistoryItems(List<EntityVersionItem> historyItems, String currentCode);
 
-	JSONArray toErrorItems(List<ErrorInfomation> errors);
+	//JSONArray toErrorItems(List<ErrorInfomation> errors);
 
 	/**
 	 * 将实体根据字段标识，转换成指定的Json对象

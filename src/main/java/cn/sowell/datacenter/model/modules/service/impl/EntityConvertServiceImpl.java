@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.abc.dto.ErrorInfomation;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -107,21 +106,21 @@ public class EntityConvertServiceImpl implements EntityConvertService{
 		return aHistoryItems;
 	}
 
-	@Override
-	public JSONArray toErrorItems(List<ErrorInfomation> errors) {
-		JSONArray jArray = new JSONArray();
-		if(errors != null) {
-			for (ErrorInfomation error : errors) {
-				JSONObject jError = new JSONObject();
-				jError.put("id", error.getId().longValue());
-				jError.put("code", error.getError_code());
-				jError.put("content", error.getError_content());
-				jError.put("message", error.getError_str());
-				jArray.add(jError);
-			}
-		}
-		return jArray;
-	}
+//	@Override
+//	public JSONArray toErrorItems(List<ErrorInfomation> errors) {
+//		JSONArray jArray = new JSONArray();
+//		if(errors != null) {
+//			for (ErrorInfomation error : errors) {
+//				JSONObject jError = new JSONObject();
+//				jError.put("id", error.getId().longValue());
+//				jError.put("code", error.getError_code());
+//				jError.put("content", error.getError_content());
+//				jError.put("message", error.getError_str());
+//				jArray.add(jError);
+//			}
+//		}
+//		return jArray;
+//	}
 
 	@Override
 	public JSONObject toEntitiesJson(Map<String, RelSelectionEntityPropertyParser> entityMap, 

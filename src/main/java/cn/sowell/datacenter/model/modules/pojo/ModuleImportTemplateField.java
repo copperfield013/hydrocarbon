@@ -24,10 +24,10 @@ public class ModuleImportTemplateField {
 	private String title;
 	
 	@Column(name="field_id")
-	private Long fieldId;
+	private Integer fieldId;
 	
 	@Column(name="composite_id")
-	private Long compositeId;
+	private Integer compositeId;
 	
 	@Column(name="c_field_index")
 	private Integer fieldIndex;
@@ -78,16 +78,16 @@ public class ModuleImportTemplateField {
 	public void setFieldIndex(Integer fieldIndex) {
 		this.fieldIndex = fieldIndex;
 	}
-	public Long getFieldId() {
+	public Integer getFieldId() {
 		return fieldId;
 	}
-	public void setFieldId(Long fieldId) {
+	public void setFieldId(Integer fieldId) {
 		this.fieldId = fieldId;
 	}
-	public Long getCompositeId() {
+	public Integer getCompositeId() {
 		return compositeId;
 	}
-	public void setCompositeId(Long compositeId) {
+	public void setCompositeId(Integer compositeId) {
 		this.compositeId = compositeId;
 	}
 }

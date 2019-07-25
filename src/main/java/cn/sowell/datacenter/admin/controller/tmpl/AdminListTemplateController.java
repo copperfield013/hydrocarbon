@@ -187,7 +187,7 @@ public class AdminListTemplateController {
 		Handlers<TemplateListTemplate, TemplateListColumn, TemplateListCriteria> handler = new Handlers<>();
 		handler.setCriteriaConsumer((criteria, item)->{
 			if(criteria.getFieldAvailable()) {
-				criteria.setCompositeId(item.getLong("compositeId"));
+				criteria.setCompositeId(item.getInteger("compositeId"));
 			}
 		});
 		TemplateListTemplate tmpl = ListTemplateFormater.generateLtmplData(

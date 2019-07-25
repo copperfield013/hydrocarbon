@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.abc.auth.pojo.AuthorityVO;
-import com.abc.auth.service.ServiceFactory;
 import com.google.common.collect.Lists;
 
+import cho.carbon.auth.pojo.AuthorityVO;
+import cho.carbon.auth.service.ServiceFactory;
 import cn.sowell.copframe.common.UserIdentifier;
 import cn.sowell.copframe.dao.utils.NormalOperateDao;
 import cn.sowell.copframe.dao.utils.UserUtils;

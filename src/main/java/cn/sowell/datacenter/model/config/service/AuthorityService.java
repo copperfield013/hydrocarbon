@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.abc.auth.pojo.AuthorityVO;
-
+import cho.carbon.auth.pojo.AuthorityVO;
 import cn.sowell.datacenter.common.ApiUser;
 import cn.sowell.datacenter.model.config.bean.ValidateDetailParamter;
 import cn.sowell.datacenter.model.config.bean.ValidateDetailResult;

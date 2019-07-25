@@ -35,8 +35,8 @@ public class Api2DictionaryController {
 	@RequestMapping("/field_options")
 	public ResponseJSON getOptions(@RequestParam String fieldIds, ApiUser user) {
 		JSONObjectResponse res = new JSONObjectResponse();
-		Set<Long> fieldIdSet = TextUtils.splitToLongSet(fieldIds, ",");
-		Map<Long, List<OptionItem>> optionsMap = dictService.getOptionsMap(fieldIdSet);
+		Set<Integer> fieldIdSet = TextUtils.splitToIntegerSet(fieldIds, ",");
+		Map<Integer, List<OptionItem>> optionsMap = dictService.getOptionsMap(fieldIdSet);
 		JSONObject map = new JSONObject();
 		optionsMap.forEach((fieldId, options)->{
 			map.put(String.valueOf(fieldId), options);
@@ -46,7 +46,7 @@ public class Api2DictionaryController {
 	}
 	
 	@RequestMapping("/cas_ops/{optGroupId}")
-	public ResponseJSON casOptions(@PathVariable Long optGroupId, ApiUser user) {
+	public ResponseJSON casOptions(@PathVariable Integer optGroupId, ApiUser user) {
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		List<DictionaryOption> options = dictService.queryOptions(optGroupId);
 		jRes.put("options", options);

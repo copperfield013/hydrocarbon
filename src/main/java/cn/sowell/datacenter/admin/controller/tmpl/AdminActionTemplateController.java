@@ -133,7 +133,7 @@ public class AdminActionTemplateController {
 						group.setId(jGroup.getLong("id"));
 						group.setTitle(jGroup.getString("title"));
 						group.setIsArray(jGroup.getBoolean("isArray")?1:null);
-						group.setCompositeId(jGroup.getLong("compositeId"));
+						group.setCompositeId(jGroup.getInteger("compositeId"));
 						group.setSelectionTemplateId(jGroup.getLong("selectionTemplateId"));
 						group.setUnallowedCreate(Integer.valueOf(1).equals(jGroup.getInteger("unallowedCreate"))? 1: null);
 						group.setOrder(i++);
@@ -146,7 +146,7 @@ public class AdminActionTemplateController {
 									JSONObject jField = (JSONObject) ele1;
 									TemplateActionField field = new TemplateActionField();
 									field.setId(jField.getLong("id"));
-									field.setFieldId(jField.getLong("fieldId"));
+									field.setFieldId(jField.getInteger("fieldId"));
 									field.setTitle(jField.getString("title"));
 									field.setViewValue(jField.getString("viewVal"));
 									Boolean dbcol = jField.getBoolean("dbcol");

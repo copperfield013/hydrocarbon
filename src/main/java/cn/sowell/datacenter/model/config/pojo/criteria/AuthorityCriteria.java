@@ -1,6 +1,6 @@
 package cn.sowell.datacenter.model.config.pojo.criteria;
 
-import com.abc.auth.pojo.UserInfo;
+import cho.carbon.auth.pojo.UserInfo;
 
 public class AuthorityCriteria {
 	private Long menuId;

@@ -7,8 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.abc.auth.pojo.UserInfo;
-
+import cho.carbon.auth.pojo.UserInfo;
 import cn.sowell.copframe.common.UserIdentifier;
 import cn.sowell.copframe.utils.CollectionUtils;
 

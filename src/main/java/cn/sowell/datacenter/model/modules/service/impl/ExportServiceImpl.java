@@ -241,7 +241,7 @@ public class ExportServiceImpl implements ExportService {
 			progress.appendMessage("开始查询数据...");
 			
 			EntitiesQueryParameter param = new EntitiesQueryParameter(ltmpl.getModule(), user);
-			param.setCriteriaFactoryConsumer((criteriaFactory)->{
+			param.setConjunctionFactoryConsumer((criteriaFactory)->{
 				lcriteriaFactory.appendPremiseCriteria(ltmpl.getModule(), tmplGroup.getPremises(), nCriteria);
 				lcriteriaFactory.appendCriterias(nCriteria, ltmpl.getModule(), criteriaFactory);
 			});

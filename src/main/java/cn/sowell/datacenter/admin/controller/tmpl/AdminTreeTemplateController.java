@@ -137,13 +137,13 @@ public class AdminTreeTemplateController {
 				Handlers<?, ?, TemplateTreeNodeCriteria> nodeCriteriaHandlers = new Handlers<>();
 				nodeCriteriaHandlers.setCriteriaConsumer((criteria, item)->{
 					if(criteria.getFieldAvailable()) {
-						criteria.setCompositeId(item.getLong("compositeId"));
+						criteria.setCompositeId(item.getInteger("compositeId"));
 					}
 				});
 				Handlers<?, ?, TemplateTreeRelationCriteria> relCriteriaHandlers = new Handlers<>();
 				relCriteriaHandlers.setCriteriaConsumer((criteria, item)->{
 					if(criteria.getFieldAvailable()) {
-						criteria.setCompositeId(item.getLong("compositeId"));
+						criteria.setCompositeId(item.getInteger("compositeId"));
 						criteria.setFilterMode(item.getString("filterMode"));
 						if(!TextUtils.hasText(criteria.getFilterMode())) {
 							criteria.setFilterMode("field");

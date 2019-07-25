@@ -11,10 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.abc.auth.pojo.AuthorityVO;
-import com.abc.auth.service.ServiceFactory;
 import com.google.common.collect.Lists;
 
+import cho.carbon.auth.pojo.AuthorityVO;
+import cho.carbon.auth.service.ServiceFactory;
 import cn.sowell.copframe.dao.utils.UserUtils;
 import cn.sowell.copframe.utils.CollectionUtils;
 import cn.sowell.copframe.utils.TextUtils;

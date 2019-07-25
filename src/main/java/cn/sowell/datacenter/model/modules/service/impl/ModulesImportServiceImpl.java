@@ -54,13 +54,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.abc.hc.FusionContext;
-import com.abc.hc.HCFusionContext;
-import com.abc.mapping.entity.Entity;
-import com.abc.panel.Integration;
-import com.abc.panel.IntegrationMsg;
-import com.abc.panel.PanelFactory;
-
+import cho.carbon.entity.entity.Entity;
+import cho.carbon.hc.FusionContext;
+import cho.carbon.hc.HCFusionContext;
+import cho.carbon.panel.Integration;
+import cho.carbon.panel.IntegrationMsg;
+import cho.carbon.panel.PanelFactory;
 import cn.sowell.copframe.common.UserIdentifier;
 import cn.sowell.copframe.dao.utils.NormalOperateDao;
 import cn.sowell.copframe.utils.CollectionUtils;
@@ -581,8 +580,8 @@ public class ModulesImportServiceImpl implements ModulesImportService {
 
 	
 	private class ImportTemplateOptionsHandler {
-		private Map<Long, Cell> enumFieldCellMap = new HashMap<Long, Cell>();
-		private Map<Long, Cell> compositeLabelCellMap = new HashMap<Long, Cell>();
+		private Map<Integer, Cell> enumFieldCellMap = new HashMap<Integer, Cell>();
+		private Map<Integer, Cell> compositeLabelCellMap = new HashMap<Integer, Cell>();
 		private Sheet optionsSheet;
 		private String moduleName;
 		private int nextOptionsRowNum = 1;

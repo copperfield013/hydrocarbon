@@ -13,9 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import com.abc.auth.pojo.UserInfo;
-import com.abc.auth.service.ServiceFactory;
-
+import cho.carbon.auth.pojo.UserInfo;
+import cho.carbon.auth.service.ServiceFactory;
 import cn.sowell.copframe.common.UserIdentifier;
 import cn.sowell.copframe.dao.utils.UserUtils;
 import cn.sowell.copframe.utils.TextUtils;

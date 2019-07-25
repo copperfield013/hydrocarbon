@@ -42,7 +42,7 @@ public class AdminFieldController {
 				@PathVariable String module, 
 				@RequestParam(name="withCompositeFields", required=false) Boolean withCompositeFields){
 		List<DictionaryComposite> infoList = dService.getAllComposites(module);
-		Map<Long, DictionaryCompositeExpand> compositeExpandMap = dService.getCompositeExpandMap(module, CollectionUtils.toSet(infoList, DictionaryComposite::getId));
+		Map<Integer, DictionaryCompositeExpand> compositeExpandMap = dService.getCompositeExpandMap(module, CollectionUtils.toSet(infoList, DictionaryComposite::getId));
 		JsonArrayResponse jRes = new JsonArrayResponse();
 		for (DictionaryComposite info : infoList) {
 			JSONObject jComposite = (JSONObject) JSON.toJSON(info);
@@ -94,7 +94,7 @@ public class AdminFieldController {
 	
 	@ResponseBody
 	@RequestMapping("/cas_ops/{optGroupId}")
-	public ResponseJSON casOptions(@PathVariable Long optGroupId) {
+	public ResponseJSON casOptions(@PathVariable Integer optGroupId) {
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		List<DictionaryOption> options = dService.queryOptions(optGroupId);
 		jRes.put("options", options);

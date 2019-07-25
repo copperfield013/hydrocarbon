@@ -926,7 +926,7 @@ public class AdminModulesController {
 	
 	@ResponseBody
 	@RequestMapping("/load_rabc_entities/{menuId}/{relationCompositeId}")
-	public ResponseJSON loadRabcEntities(@PathVariable Long menuId, @PathVariable Long relationCompositeId, 
+	public ResponseJSON loadRabcEntities(@PathVariable Long menuId, @PathVariable Integer relationCompositeId, 
 			String codes, String fields) {
 		SideMenuLevel2Menu menu = authService.validateL2MenuAccessable(menuId);
 		return aLoadRabcEntities(menu.getTemplateModule(), relationCompositeId, codes, fields); 
@@ -937,14 +937,14 @@ public class AdminModulesController {
 	public ResponseJSON nodeLoadRabcEntities(
 			@PathVariable Long menuId,
 			@PathVariable Long nodeId,
-			@PathVariable Long relationCompositeId,
+			@PathVariable Integer relationCompositeId,
 			String codes, String fields) {
 		SideMenuLevel2Menu menu = authService.validateL2MenuAccessable(menuId);
 		TemplateTreeNode nodeTemplate = treeService.getNodeTemplate(menu.getTemplateModule(), nodeId);
 		return aLoadRabcEntities(nodeTemplate.getModuleName(), relationCompositeId, codes, fields); 
 	}
 
-	private ResponseJSON aLoadRabcEntities(String moduleName, Long relationCompositeId, String codes, String fields) {
+	private ResponseJSON aLoadRabcEntities(String moduleName, Integer relationCompositeId, String codes, String fields) {
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		DictionaryComposite composite = dictService.getComposite(moduleName, relationCompositeId);
 		EntitiesQueryParameter param = new EntitiesQueryParameter(composite.getModule(), UserUtils.getCurrentUser());

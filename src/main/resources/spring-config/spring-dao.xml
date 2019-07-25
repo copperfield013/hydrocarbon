@@ -25,8 +25,8 @@
             <list>
             	<value>cn.sowell.datacenter.model.*.pojo</value>
             	<value>cn.sowell.dataserver.model.*.pojo</value>
-            	<value>com.abc.extface.dto</value>
-            	<value>com.abc.*.extface.dto</value>
+            	<value>cho.carbon.extface.dto</value>
+            	<value>cho.carbon.*.extface.dto</value>
         	</list>
         </property>
     </bean>

@@ -455,7 +455,8 @@ public class Api2EntityCurdController {
 			//用模板组合解析，并返回可以解析为json的对象
 			EntityDetail detail = entityConvertService.convertEntityDetail(entity, dtmplService.getTemplate(dtmpl.getId()));
 			jRes.put("entity", detail);
-			jRes.put("errors", entityConvertService.toErrorItems(entity.getErrors()));
+			jRes.put("errors", new byte[0]);
+			//jRes.put("errors", entityConvertService.toErrorItems(entity.getErrors()));
 			jRes.put("versionCode", versionCode);
 			jRes.setStatus("suc");
 		}

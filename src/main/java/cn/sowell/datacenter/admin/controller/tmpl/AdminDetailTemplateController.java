@@ -146,7 +146,7 @@ public class AdminDetailTemplateController {
 	@RequestMapping("/relation_dtmpl/{moduleName}/{relationCompositeId}")
 	public String citeRelationDtmpl(
 			@PathVariable String moduleName, 
-			@PathVariable Long relationCompositeId,
+			@PathVariable Integer relationCompositeId,
 			Long dtmplId,
 			Model model) {
 		ModuleMeta relationCompositeModule = mService.getCompositeRelatedModule(moduleName, relationCompositeId);
@@ -209,7 +209,7 @@ public class AdminDetailTemplateController {
 						group.setId(jGroup.getLong("id"));
 						group.setTitle(jGroup.getString("title"));
 						group.setIsArray(jGroup.getBoolean("isArray")?1:null);
-						group.setCompositeId(jGroup.getLong("compositeId"));
+						group.setCompositeId(jGroup.getInteger("compositeId"));
 						group.setDialogSelectType(jGroup.getString("dialogSelectType"));
 						group.setRabcTemplateGroupId(jGroup.getLong("rabcTemplateGroupId"));
 						group.setRabcUncreatable(jGroup.getInteger("rabcUncreatable"));
@@ -239,7 +239,7 @@ public class AdminDetailTemplateController {
 									JSONObject jField = (JSONObject) ele1;
 									TemplateDetailField field = new TemplateDetailField();
 									field.setId(jField.getLong("id"));
-									field.setFieldId(jField.getLong("fieldId"));
+									field.setFieldId(jField.getInteger("fieldId"));
 									field.setTitle(jField.getString("title"));
 									field.setViewValue(jField.getString("viewVal"));
 									Boolean dbcol = jField.getBoolean("dbcol");

@@ -3,8 +3,7 @@ package cn.sowell.datacenter.test.ks;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.abc.auth.pojo.UserInfo;
-
+import cho.carbon.auth.pojo.UserInfo;
 import cn.sowell.datacenter.common.ApiUser;
 import cn.sowell.datacenter.common.UserWithToken;
 import cn.sowell.datacenter.model.ks.service.KaruiServExecService;
