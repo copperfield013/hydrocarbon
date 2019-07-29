@@ -36,16 +36,6 @@
 			</div>
 		</div>
 	</div>
-	<c:if test="${mode == 'detail' }">
-		<div id="errors" class="blur-hidden" style="display: none;">
-			<ul>
-				<c:forEach items="${entity.errors }" var="error">
-					<li>${error.error_str }</li>
-				</c:forEach>
-			</ul>
-	   </div>
-	   <style target="timeline-area" ></style>
-	</c:if>
 </div>
 <script>
 	seajs.use(['entity/js/entity-detail.js'], function(EntityDetail){

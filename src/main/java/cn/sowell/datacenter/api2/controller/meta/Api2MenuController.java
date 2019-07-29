@@ -60,6 +60,9 @@ public class Api2MenuController {
 		if(currentBlock == null) {
 			currentBlock = menuService.getBlock(sysConfig.getDefaultBlockId());
 		}
+		if(currentBlock == null && blocks.size() > 0) {
+			currentBlock = blocks.get(0);
+		}
 		jRes.put("currentBlockId", currentBlock.getId());
 		
 		jRes.put("blocks", jBlocks);

@@ -6,9 +6,9 @@
 	<div class="page-header">
 		<div class="header-title">
 			<h1>${module.title}-${entity.title }-详情</h1>
-			<c:if test="${entity.errors != null && fn:length(entity.errors) > 0 }">
+			<%-- <c:if test="${entity.errors != null && fn:length(entity.errors) > 0 }">
 			    <h1 id="showErrors" class="fa fa-info-circle" style="cursor: pointer;color: #CD5C5C;"></h1>
-			</c:if>
+			</c:if> --%>
 		</div>
 		<div class="header-buttons">
 			<a class="refresh" title="刷新" id="refresh-toggler" href="page:refresh">
@@ -118,13 +118,13 @@
 			</form>
 		</div>
 	</div>
-	<div id="errors" class="blur-hidden" style="display: none;">
+	<%-- <div id="errors" class="blur-hidden" style="display: none;">
 		<ul>
 			<c:forEach items="${entity.errors }" var="error">
 				<li>${error.error_str }</li>
 			</c:forEach>
 		</ul>
-   </div>
+   </div> --%>
 	<div id="timeline-area" class="blur-hidden" style="display: none;">
 		<div class="timeline-wrapper">
 			<div class="VivaTimeline">
