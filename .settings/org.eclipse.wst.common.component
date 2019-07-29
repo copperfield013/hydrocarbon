@@ -10,10 +10,10 @@
         <dependent-module archiveName="cpf-spring-0.3.21.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cpf-spring/cpf-spring">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="dataserver-1.31.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dataserver/dataserver">
+        <dependent-module archiveName="dataserver-1.32.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/dataserver/dataserver">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="entityResolver-2.67.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/entityResolver/entityResolver">
+        <dependent-module archiveName="entityResolver-2.68.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/entityResolver/entityResolver">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/hydrocarbon/target/classes"/>

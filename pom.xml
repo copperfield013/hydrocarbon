@@ -10,8 +10,8 @@
 	
 	<properties>
 		<version.kie>7.10.0.Final</version.kie>
-		<version.abcitem>4.2.135.alphal</version.abcitem>
-		<version.dataserver>1.31</version.dataserver>
+		<version.abcitem>4.2.136.alphal</version.abcitem>
+		<version.dataserver>1.32</version.dataserver>
 		<version.cpfweb>0.2.14</version.cpfweb>
 		<version.cpfutils>0.3.21</version.cpfutils>
 		<version.cpfspring>0.3.21</version.cpfspring>
