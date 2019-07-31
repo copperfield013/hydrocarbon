@@ -143,7 +143,8 @@ define(function(require, exports, module){
 			//
 			interval	: 0,
 			cache		: false,
-			setHost		: true
+			setHost		: true,
+			headersHandler	: $.noop
 		};
 		if(typeof formData === 'function'){
 			if($.isPlainObject(whenSuc)){
@@ -189,10 +190,12 @@ define(function(require, exports, module){
 			//var isTimeout = new Date().getTime() - tokeObj.time >  $CPF.getParam('ajaxHeaderTokenTimeout');
 			headers[AJAX_HEADER_TOKEN_KEY] = token;
 		}
+		param.headersHandler(headers);
 		
 		if(param.setHost){
 			url = $CPF.getParam('ajaxHost') + url
 		}
+		
 		console.debug('发送请求到' + url);
 		console.debug(fData);
 		var reqArgs = {};

@@ -48,7 +48,7 @@ public class DatacenterReloadServiceImpl implements DatacenterReloadService, Ini
 		moduleMediator.refresh();
 		fFactory.sync();
 		tService.clearCache();
-		return "同步成功";
+		return "200";
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class DatacenterReloadServiceImpl implements DatacenterReloadService, Ini
 	public String syncCache() {
 		syncModule();
 		tService.reloadCache();
-		return "同步成功";
+		return "200";
 	}
 
 	@Override

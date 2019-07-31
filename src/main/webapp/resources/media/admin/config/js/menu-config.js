@@ -533,6 +533,7 @@ define(function(require, exports, module){
 					$.each(customPages, function(){
 						if(this.id == l2Menu.customPageId){
 							l2Menu.customPage = this;
+							console.log('============relatedL2Menus', this.relatedL2Menus);
 							this.relatedL2Menus.push(l2Menu);
 							return false;
 						}

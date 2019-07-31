@@ -76,6 +76,12 @@ public class AdminConfigKsController {
 		return AdminConstants.JSP_CONFIG_KS + "/ks_edit.jsp";
 	}
 	
+	@RequestMapping("/test/{ksId}")
+	public String test(@PathVariable Long ksId, Model model) {
+		model.addAttribute("ksId", ksId);
+		return AdminConstants.JSP_CONFIG_KS + "/ks_test.jsp";
+	}
+	
 	@ResponseBody
 	@RequestMapping("/load_all_ks")
 	public ResponseJSON loadAllKaruiService() {

@@ -277,7 +277,7 @@ define(function(require, exports, module){
 					criteria.detailHandler(function($$){
 						var defValInput = criteria.getDefaultValueInput();
 						criteria.setDefaultInputType(criteria.getDefaultValueInput());
-						$$('#filter-occasion').val(criteria.getFilterOccasion());
+						$$('#filter-occasion').val(criteria.getFilterOccasion() || '1');
 						$$('#criteria-detail-comparator').val(criteria.getComparatorName());
 						$$('#criteria-default-value-container').append(defValInput.getInput());
 						$$('#criteria-detail-placeholder').hide();
@@ -308,7 +308,7 @@ define(function(require, exports, module){
 					filterFieldInputSelectable($$('#field-input-type'), field).done(function(){
 						$$('#field-input-type').val(defValInput.getType());
 						criteria.setDefaultInputType(criteria.getDefaultValueInput());
-						$$('#filter-occasion').val(criteria.getFilterOccasion());
+						$$('#filter-occasion').val(criteria.getFilterOccasion() || '1');
 						$$('#criteria-detail-comparator').val(criteria.getComparatorName());
 						$$('#criteria-default-value-container').append(defValInput.getInput());
 						$$('#criteria-detail-placeholder').val(criteria.getPlaceholder());
@@ -379,7 +379,7 @@ define(function(require, exports, module){
 					});
 				},
 				afterSetFilterOccasion	: function(filterOccasion){
-					$('#filter-occasion', $page).val(filterOccasion);
+					$('#filter-occasion', $page).val(filterOccasion || '1');
 				},
 				afterSetPlaceholder	: function(placeholder){
 					$('#criteria-detail-placeholder', $page).val(placeholder);

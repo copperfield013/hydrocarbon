@@ -1125,6 +1125,10 @@ define(function(require, exports){
 	}
 	
 	Context.prototype.bind = function(propertyName, callback){
+		if($.isArray(propertyName)){
+			for(var i in propertyName){this.bind(propertyName[i], callback)}
+			return this;
+		}
 		exports.assert(typeof propertyName == 'string' && !!propertyName, '第一个参数必须是不为空的字符串');
 		if($.isArray(callback)){
 			for(var i = 0; i < callback.length; i++){

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.sowell.copframe.dto.ajax.JSONObjectResponse;
 import cn.sowell.copframe.dto.ajax.ResponseJSON;
 import cn.sowell.datacenter.api2.controller.Api2Constants;
+import cn.sowell.datacenter.common.ApiUser;
 import cn.sowell.datacenter.model.admin.service.AdminUserService;
 
 @RestController
@@ -33,6 +34,13 @@ public class Api2AuthController {
 				jRes.put("errorMsg", "密码错误或用户不存在");
 			}
 		}
+		return jRes;
+	}
+	
+	@RequestMapping("/test")
+	public ResponseJSON test(ApiUser user) {
+		JSONObjectResponse jRes = new JSONObjectResponse();
+		jRes.setStatus("suc");
 		return jRes;
 	}
 }

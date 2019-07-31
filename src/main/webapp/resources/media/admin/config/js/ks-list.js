@@ -34,7 +34,7 @@ define(function(require, exports, module){
 			var tmplMap = context.getStatus('tmplMap');
 			if(tmplMap){
 				tmplMap['ks-list'].replaceIn($page, context.properties, {
-					
+					testKs
 				});
 				$CPF.closeLoading();
 			}
@@ -73,6 +73,94 @@ define(function(require, exports, module){
 				});
 			}
 			return def.promise();
+		}
+		
+		function testKs(ksId, ksTitle){
+			if(ksId){
+				Ajax.ajax('admin/config/ks/load_ks/' + ksId).done(function(data){
+					if(data.ks){
+						console.log(data.ks);
+						var ksTestContext = Utils.createContext({params:{}, pathVar:{}});
+						ksTestContext.bind('token', function(val){
+							//绑定token设置的事件
+							if(val.after){
+								ksTestContext.getDom('btn-sign-in').attr('disabled', 'disabled');
+							}else{
+								ksTestContext.getDom('btn-sign-in').removeAttr('disabled');
+							}
+						}).bind('pathVar', function(val){
+							//绑定修改路径参数事件
+							var pathVarMap = val.after;
+							var path = data.ks.path;
+							for(var name in pathVarMap){
+								path = path.replace(new RegExp('\\{\\s*' + name + '\\s*\\}'), pathVarMap[name]);
+							}
+							ksTestContext.setStatus('path', path);
+						}).bind(['path', 'token'], function(){
+							var path = ksTestContext.getStatus('path');
+							if(path && ksTestContext.getStatus('token')){
+								ksTestContext.getDom('path').val(path);
+								ksTestContext.getDom('btn-submit').removeAttr('disabled');
+							}else{
+								ksTestContext.getDom('btn-submit').attr('disabled', 'disabled');
+							}
+						});
+						var $ksTestPage = context.getStatus('tmplMap')['ks-test-page'].tmpl({
+							ks: data.ks
+						}, {
+							//登录
+							signIn	: function(){
+								var username = ksTestContext.getDom('username').val();
+								var password = ksTestContext.getDom('password').val();
+								Ajax.ajax('api2/auth/token', {username, password}).done(function(data){
+									if(data.status === 'suc' && data.token){
+										Dialog.notice('登录成功', 'success');
+										ksTestContext.setStatus('token', data.token);
+									}else{
+										Dialog.notice('登录失败', 'error');
+									}
+								});
+							},
+							userChanged	: function(){
+								if(ksTestContext.getDom('btn-sign-in').prop('disabled') && ksTestContext.getStatus('token')){
+									ksTestContext.getDom('btn-sign-in').removeAttr('disabled');
+								}
+							},
+							triggerCriteriaChange	: function(criteria){
+								var value = $(this).val();
+								if(criteria.source === 'path-var'){
+									ksTestContext.getStatus('pathVar')[criteria.name] = value;
+									ksTestContext.setStatus('pathVar');
+								}
+							},
+							submit		: function(){
+								var path = ksTestContext.getStatus('path');
+								var params = ksTestContext.getStatus('params');
+								var API_PREFIX = 'api2/ks/c/';
+								if(path){
+									Ajax.ajax(API_PREFIX + path, params, undefined, {
+										headersHandler	: function(headers){headers['datacenter-token'] = ksTestContext.getStatus('token')}
+									}).done(function(data){
+										if(data.result){
+											Dialog.notice('请求成功', 'success');
+											ksTestContext.getDom('resData').val(JSON.stringify(data.result, null, '\t'))
+										}else{
+											Dialog.notice('没有返回数据', 'warning');
+										}
+									});
+								}
+							}
+						});
+						require('event').prepareToContext($ksTestPage, ksTestContext);
+						Dialog.openDialog($ksTestPage, '测试轻服务（' + data.ks.title + '）', 'ks-test', {
+							contentType	: 'dom',
+							width		: 1000,
+							height		: 500
+						})
+					}
+				});
+				
+			}
 		}
 		
 		function getPageEvents(){
