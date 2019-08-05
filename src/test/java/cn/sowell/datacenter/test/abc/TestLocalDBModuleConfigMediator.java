@@ -7,12 +7,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import cn.sowell.copframe.utils.TextUtils;
 
-@ContextConfiguration(locations = "classpath*:spring-config/spring-junit.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
+/*@ContextConfiguration(locations = "classpath*:spring-config/spring-junit.xml")
+@RunWith(SpringJUnit4ClassRunner.class)*/
 public class TestLocalDBModuleConfigMediator {
 
 	
-	@Test
+	//@Test
 	public void test() {
 		try {
 			//UserInfo user = UserInfoService.getInstance().getUserInfoByUserName("admin");

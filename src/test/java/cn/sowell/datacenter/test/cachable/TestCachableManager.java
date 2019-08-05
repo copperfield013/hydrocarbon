@@ -18,8 +18,8 @@ import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroup;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateGroupAction;
 import cn.sowell.dataserver.model.tmpl.pojo.TemplateListTemplate;
 
-@ContextConfiguration(locations = "classpath*:spring-config/spring-junit.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
+/*@ContextConfiguration(locations = "classpath*:spring-config/spring-junit.xml")
+@RunWith(SpringJUnit4ClassRunner.class)*/
 public class TestCachableManager {
 	@Resource
 	TemplateGroupManager tmplGroupManager;
@@ -30,7 +30,7 @@ public class TestCachableManager {
 	@Resource
 	ListTemplateManager ltmplManager;
 	
-	@Test
+	//@Test
 	@Transactional
 	public void test() {
 		TemplateGroup tmplGroup = tmplGroupManager.get(30022l);

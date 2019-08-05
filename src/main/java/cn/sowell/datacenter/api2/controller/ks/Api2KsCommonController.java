@@ -29,6 +29,8 @@ import cn.sowell.dataserver.model.karuiserv.service.KaruiServService;
 @RestController
 @RequestMapping(Api2Constants.URI_KS)
 public class Api2KsCommonController {
+	private static final String PREFIX = "/";
+
 	@Resource
 	KaruiServService ksService;
 	
@@ -51,12 +53,12 @@ public class Api2KsCommonController {
 	
 	@RequestMapping("/c/**")
 	public ResponseJSON index(ApiUser user, HttpServletRequest request) {
-		String path = "/" + extractFilePath(request);
+		String path = PREFIX + extractFilePath(request);
 		JSONObjectResponse jRes = new JSONObjectResponse();
 		jRes.put("path", path);
 		Map<String, String> requestMap = HttpRequestUtils.convertParamMap(request);
 		//根据路径匹配轻服务
-		KaruiServMatcher matcher = ksExecService.match(path, requestMap);
+		KaruiServMatcher matcher = ksExecService.match(path, requestMap, PREFIX);
 		if(matcher != null) {
 			KaruiServ ks = matcher.getKaruiServ();
 			try {

@@ -42,6 +42,27 @@
 					</div>
 				</div>
 				
+				<div class="widget" on-prepare="page-widge" style="display: none">
+					<div class="widget-header">
+						<span class="widget-caption">分页参数</span>
+					</div>
+					<div class="widget-body">
+						<div class="row" style="margin-top:5px;display: flex;align-items: center;">
+							<label class="control-label col-lg-2 col-lg-offset-1">页号</label>
+							<div class="col-lg-3">
+								<input on-prepare="pageNo" class="form-control cpf-field-int" type="number" value="1"/>
+							</div>
+						</div>
+						<div class="row" style="margin-top:5px;display: flex;align-items: center;">
+							<label class="control-label col-lg-2 col-lg-offset-1">条数</label>
+							<div class="col-lg-3">
+								<input on-prepare="pageSize" class="form-control cpf-field-int" type="number" value="10" max="1000" />
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
 				<div class="widget">
 					<div class="widget-header">
 						<span class="widget-caption">请求预览</span>
@@ -54,7 +75,7 @@
 							<div class="form-group col-lg-12">
 								<label class="control-label col-lg-12">提交路径</label>
 								<div class="col-lg-12">
-									<input class="form-control" type="text" on-prepare="path;ks:path"  />
+									<input class="form-control" type="text" on-prepare="path;ks:path" readonly="readonly" />
 								</div>
 							</div>
 						</div>
@@ -62,7 +83,7 @@
 							<div class="form-group col-lg-12">
 								<label class="col-lg-12">请求参数体</label>
 								<div class="col-lg-12">
-									<textarea class="form-control"></textarea>
+									<pre on-prepare="paramsEditor" style="height: 100px;font-size: 17px;"></pre>
 								</div>
 							</div>
 						</div>
@@ -76,7 +97,7 @@
 					<div class="widget-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<pre on-prepare="result" style="height: 300px;font-size: 17px;"></pre>
+								<pre on-prepare="resEditor" style="height: 300px;font-size: 17px;"></pre>
 								<!-- <textarea on-prepare="resData" rows="20" class="form-control"></textarea> -->
 							</div>
 						</div>

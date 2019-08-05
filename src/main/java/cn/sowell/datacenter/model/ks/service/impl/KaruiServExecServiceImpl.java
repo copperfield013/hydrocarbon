@@ -51,14 +51,15 @@ public class KaruiServExecServiceImpl implements KaruiServExecService{
 	
 	
 	@Override
-	public KaruiServMatcher match(String path, Map<String, String> parameters) {
+	public KaruiServMatcher match(String path, Map<String, String> parameters, String prefix) {
 		List<KaruiServ> ksList = ksService.queryAll();
 		
 		for (KaruiServ ks : ksList) {
-			if(!Constants.TRUE.equals(ks.getDisabled()) && antPathMatcher.match(ks.getPath(), path)) {
+			String ksPath = prefix + ks.getPath();
+			if(!Constants.TRUE.equals(ks.getDisabled()) && antPathMatcher.match(ksPath, path)) {
 				KaruiServMatcher matcher = new KaruiServMatcher();
 				matcher.setKaruiServ(ks);
-				Map<String, String> vars = antPathMatcher.extractUriTemplateVariables(ks.getPath(), path);
+				Map<String, String> vars = antPathMatcher.extractUriTemplateVariables(ksPath, path);
 				matcher.setPathVariableMap(vars);
 				matcher.setParameters(parameters);
 				return matcher;
