@@ -3,7 +3,7 @@
 		<div class="row" style="margin-top:5px;display: flex;align-items: center;">
 			<label class="control-label col-lg-2 col-lg-offset-1">${criteria.name}</label>
 			<div class="col-lg-8">
-				<input readonly="readonly" on-change="do:triggerCriteriaChange(ks.criterias[${i}])" class="form-control criteria-value" type="text"/>
+				<input ${criteria.source === 'param'? 'readonly="readonly"': ''} on-change="do:triggerCriteriaChange(ks.criterias[${i}])" class="form-control criteria-value" type="text"/>
 			</div>
 			{{if criteria.source === 'param'}}
 				<div class="col-lg-1">
