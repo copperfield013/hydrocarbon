@@ -9,7 +9,7 @@
 	<url>http://maven.apache.org</url>
 	
 	<properties>
-		<version.kie>7.10.0.Final</version.kie>
+		<version.kie>7.60.0.Final</version.kie>
 		<version.abcitem>4.2.140.alphal</version.abcitem>
 		<version.dataserver>1.34</version.dataserver>
 		<version.cpfweb>0.2.14</version.cpfweb>
